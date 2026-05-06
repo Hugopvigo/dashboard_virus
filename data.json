@@ -82,6 +82,14 @@
     { "date": "6 May",    "dot": "amber", "text": "Ministra Mónica García confirma llegada a <strong>Granadilla de Abona (Tenerife)</strong>. Españoles irán a Torrejón." },
     { "date": "~8 May",   "dot": "blue",  "text": "<strong>Llegada estimada</strong> a Tenerife. Protocolos de cuarentena activados." }
   ],
+  "newsSources": [
+    { "name": "El País",   "color": "#4488ff", "url": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/ciencia/portada" },
+    { "name": "El Mundo",  "color": "#ffaa00", "url": "https://e00-elmundo.uecdn.es/elmundo/rss/salud.xml" },
+    { "name": "OMS",       "color": "#00cc77", "url": "https://www.who.int/feeds/entity/mediacentre/news/en/rss.xml" },
+    { "name": "20min",     "color": "#ff4444", "url": "https://www.20minutos.es/rss/salud/" },
+    { "name": "Reuters",   "color": "#cc88ff", "url": "https://feeds.reuters.com/reuters/healthNews" }
+  ],
+
   "trend": {
     "labels":    ["24 Abr", "26 Abr", "28 Abr", "30 Abr", "2 May", "4 May", "5 May", "6 May"],
     "confirmed": [0, 1, 2, 3, 5, 6, 7, 8],

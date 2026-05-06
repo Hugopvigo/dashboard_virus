@@ -35,6 +35,10 @@
   <button class="nav-btn" data-view="countries">Países</button>
   <button class="nav-btn" data-view="timeline">Cronología</button>
   <button class="nav-btn" data-view="info">Información médica</button>
+  <button class="nav-btn" data-view="news">
+    Noticias
+    <span class="nav-badge" id="news-badge" style="display:none">0</span>
+  </button>
 </nav>
 
 <main>
@@ -258,12 +262,30 @@
     </div>
   </div>
 
+  <!-- ── NEWS ───────────────────────────────────────────────────────────────── -->
+  <div class="view" id="view-news">
+    <div class="map-card">
+      <div class="card-header">
+        <span class="card-title">Últimas noticias</span>
+        <span class="news-count" id="news-count">Cargando…</span>
+      </div>
+      <div style="padding:20px">
+        <div class="news-toolbar">
+          <div class="news-filters" id="news-filters"></div>
+          <button class="news-refresh-btn" id="news-refresh-btn">↺ Actualizar</button>
+        </div>
+        <div class="news-grid" id="news-grid"></div>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="js/map.js"></script>
 <script src="js/charts.js"></script>
+<script src="js/news.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

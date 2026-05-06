@@ -27,7 +27,11 @@ async function boot() {
 
   // Leaflet needs a rendered container with pixel dimensions
   setTimeout(() => initMap(appData), 60);
+
+  // News loads in background — ready when user clicks the tab
+  initNews(appData);
 }
+
 
 // ── Meta / banner ─────────────────────────────────────────────────────────────
 
@@ -188,6 +192,15 @@ function refreshSortHeaders() {
 // ── Navigation ────────────────────────────────────────────────────────────────
 
 function initNav() {
+  const refreshBtn = document.getElementById('news-refresh-btn');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', () => {
+      newsLoaded = false;
+      allArticles = [];
+      initNews(appData);
+    });
+  }
+
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
