@@ -32,9 +32,24 @@ body {
   line-height: 1.5;
 }
 
+/* Subtle scanline texture — the "movie screen" feel */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.07) 3px,
+    rgba(0, 0, 0, 0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 9998;
+}
+
 /* ── HEADER ─────────────────────────────────────── */
 header {
-  border-bottom: 1px solid var(--border);
   padding: 20px 32px;
   display: flex;
   align-items: center;
@@ -43,20 +58,62 @@ header {
   position: sticky;
   top: 0;
   z-index: 200;
+  /* Epic bottom border: red gradient instead of plain line */
+  border-bottom: none;
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--red) 20%,
+    rgba(255,68,68,0.35) 50%,
+    var(--red) 80%,
+    transparent 100%
+  );
 }
 
 .logo { display: flex; align-items: center; gap: 18px; }
 
+/* Logo wrapper: fades left+right edges into header bg */
+.logo-brand {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .logo-brand img {
-  height: 84px;
+  height: 126px;
   width: auto;
   display: block;
   mix-blend-mode: screen;
+  /* Darken logo bg closer to #0a0c0f so screen-blend removes it fully */
+  filter: brightness(0.72);
+}
+
+/* Gradient overlay that fades the PNG edges into the header background */
+.logo-brand::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    var(--bg) 0%,
+    transparent 22%,
+    transparent 78%,
+    var(--bg) 100%
+  );
+  pointer-events: none;
 }
 
 .logo-divider {
   width: 1px;
-  height: 54px;
+  height: 64px;
   background: var(--border2);
   flex-shrink: 0;
 }
@@ -120,10 +177,24 @@ nav {
   padding: 0 32px;
   display: flex;
   align-items: center;
-  background: var(--bg);
+  background: var(--bg2);
   position: sticky;
   top: 125px;
   z-index: 190;
+}
+
+/* Thin red accent line at top of nav */
+nav::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255,68,68,0.4),
+    transparent
+  );
 }
 
 .nav-btn {
@@ -702,8 +773,9 @@ table { width: 100%; border-collapse: collapse; font-size: 14px; }
   .bottom-grid  { grid-template-columns: 1fr; }
   .news-grid    { grid-template-columns: 1fr; }
   header        { padding: 12px 16px; }
-  nav           { padding: 0 16px; top: 76px; }
-  .nav-btn      { padding: 16px 18px; font-size: 12px; }
+  nav           { padding: 0 16px; top: 88px; }
+  .nav-btn      { padding: 16px 16px; font-size: 12px; }
   #map          { height: 260px; }
-  .logo-brand img { height: 52px; }
+  .logo-brand img { height: 60px; }
+  .logo-brand::after { display: none; }
 }
