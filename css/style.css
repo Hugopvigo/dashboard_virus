@@ -57,7 +57,7 @@ header {
   background: var(--bg);
   position: sticky;
   top: 0;
-  z-index: 200;
+  z-index: 1000;
   /* Epic bottom border: red gradient instead of plain line */
   border-bottom: none;
 }
@@ -165,8 +165,8 @@ nav {
   align-items: center;
   background: var(--bg2);
   position: sticky;
-  top: 125px;
-  z-index: 190;
+  top: 166px;
+  z-index: 999;
 }
 
 /* Thin red accent line at top of nav */
@@ -311,7 +311,10 @@ main { padding: 32px; max-width: 1200px; margin: 0 auto; }
 .card-body { padding: 20px; }
 
 /* ── LEAFLET MAP ─────────────────────────────────── */
-#map { height: 340px; }
+#map {
+  height: 340px;
+  isolation: isolate; /* contain Leaflet's internal z-indices */
+}
 
 .leaflet-container {
   background: var(--bg3) !important;
@@ -759,7 +762,7 @@ table { width: 100%; border-collapse: collapse; font-size: 14px; }
   .bottom-grid  { grid-template-columns: 1fr; }
   .news-grid    { grid-template-columns: 1fr; }
   header        { padding: 12px 16px; }
-  nav           { padding: 0 16px; top: 88px; }
+  nav           { padding: 0 16px; top: 84px; }
   .nav-btn      { padding: 16px 16px; font-size: 12px; }
   #map          { height: 260px; }
   .logo-brand img { height: 60px; }
