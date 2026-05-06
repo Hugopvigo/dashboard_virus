@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "lastUpdate": "2026-05-06T22:00:00Z",
+    "alertLevel": "BAJO",
+    "alertColor": "green",
+    "alertText": "La OMS y el Ministerio de Sanidad de España supervisan activamente el brote. No hay transmisión comunitaria confirmada fuera del barco."
+  },
+  "totals": {
+    "deaths": 3,
+    "confirmed": 8,
+    "suspected": 12,
+    "quarantine": 150,
+    "countries": 5
+  },
+  "facts": [
+    { "label": "Cepa identificada",       "value": "Andes (transmisible entre humanos)", "color": null },
+    { "label": "Origen probable",         "value": "Patagonia argentina (pre-embarque)", "color": null },
+    { "label": "Periodo de incubación",   "value": "1 a 6 semanas",                      "color": null },
+    { "label": "Tasa mortalidad Andes",   "value": "~25–35%",                             "color": "amber" },
+    { "label": "Llegada est. Canarias",   "value": "~8 mayo 2026",                        "color": null },
+    { "label": "Pasajeros españoles",     "value": "14 (traslado a Torrejón)",            "color": null }
+  ],
+  "countries": [
+    {
+      "name": "Argentina",        "flag": "🇦🇷",
+      "lat": -40.0, "lng": -63.5,
+      "deaths": 2, "confirmed": 3, "suspected": 0,
+      "status": "high", "statusText": "Brote activo",
+      "notes": "Origen probable. Patagonia. Contagio previo al embarque."
+    },
+    {
+      "name": "MV Hondius",       "flag": "🚢",
+      "lat": 15.3, "lng": -22.8,
+      "deaths": 1, "confirmed": 3, "suspected": 5,
+      "status": "high", "statusText": "Cuarentena activa",
+      "notes": "Rumbo a Granadilla de Abona (Tenerife). ~150 pasajeros."
+    },
+    {
+      "name": "Suiza",            "flag": "🇨🇭",
+      "lat": 47.4, "lng": 8.5,
+      "deaths": 0, "confirmed": 1, "suspected": 0,
+      "status": "med", "statusText": "Caso aislado",
+      "notes": "Ex-pasajero del barco. Hospitalizado en Zúrich."
+    },
+    {
+      "name": "Sudáfrica",        "flag": "🇿🇦",
+      "lat": -26.2, "lng": 28.0,
+      "deaths": 0, "confirmed": 1, "suspected": 0,
+      "status": "med", "statusText": "Caso aislado",
+      "notes": "Confirmado por laboratorio. Seguimiento activo."
+    },
+    {
+      "name": "España",           "flag": "🇪🇸",
+      "lat": 40.4, "lng": -3.7,
+      "deaths": 0, "confirmed": 0, "suspected": 7,
+      "status": "low", "statusText": "Vigilancia",
+      "notes": "14 españoles en el barco. Traslado a Torrejón tras llegada."
+    },
+    {
+      "name": "Cabo Verde",       "flag": "🇨🇻",
+      "lat": 14.93, "lng": -23.51,
+      "deaths": 0, "confirmed": 0, "suspected": 0,
+      "status": "none", "statusText": "Sin casos",
+      "notes": "Denegó entrada al barco. Personal médico subió a bordo."
+    }
+  ],
+  "shipRoute": [
+    { "lat": -54.8,  "lng": -68.3,  "label": "Ushuaia — zarpe 20 Mar" },
+    { "lat": -38.0,  "lng": -57.0,  "label": "Atlántico Sur" },
+    { "lat": -15.0,  "lng": -35.0,  "label": "Atlántico Central" },
+    { "lat": 5.0,    "lng": -26.0,  "label": "Atlántico Norte" },
+    { "lat": 14.93,  "lng": -23.51, "label": "Cabo Verde — acceso denegado 4 May" },
+    { "lat": 28.07,  "lng": -16.56, "label": "Tenerife — destino ~8 May" }
+  ],
+  "timeline": [
+    { "date": "20 Mar",   "dot": "gray",  "text": "El <strong>MV Hondius</strong> zarpa de Ushuaia (Argentina) con ~150 pasajeros." },
+    { "date": "1 Abr",    "dot": "gray",  "text": "Regresa a Ushuaia y vuelve a zarpar. Segunda etapa del viaje." },
+    { "date": "1–20 Abr", "dot": "amber", "text": "Primeros pasajeros desarrollan síntomas. Período de incubación en curso." },
+    { "date": "~26 Abr",  "dot": "red",   "text": "<strong>Primeras muertes</strong> a bordo. Pareja neerlandesa fallece. Alarma médica." },
+    { "date": "4 May",    "dot": "red",   "text": "El barco ancla frente a <strong>Praia (Cabo Verde)</strong>. Cabo Verde deniega entrada. OMS confirma 3 muertos." },
+    { "date": "5 May",    "dot": "amber", "text": "Pasajero ex-crucero da positivo en <strong>Suiza</strong>. España autoriza atraque en Canarias." },
+    { "date": "6 May",    "dot": "amber", "text": "Ministra Mónica García confirma llegada a <strong>Granadilla de Abona (Tenerife)</strong>. Españoles irán a Torrejón." },
+    { "date": "~8 May",   "dot": "blue",  "text": "<strong>Llegada estimada</strong> a Tenerife. Protocolos de cuarentena activados." }
+  ],
+  "trend": {
+    "labels":    ["24 Abr", "26 Abr", "28 Abr", "30 Abr", "2 May", "4 May", "5 May", "6 May"],
+    "confirmed": [0, 1, 2, 3, 5, 6, 7, 8],
+    "deaths":    [0, 1, 2, 2, 3, 3, 3, 3]
+  }
+}

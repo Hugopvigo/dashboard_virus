@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hantavirus Monitor — MugreCorp</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-brand">
+      <img src="logo.png" alt="MugreCorp">
+    </div>
+    <div class="logo-divider"></div>
+    <div class="logo-dot"></div>
+    <div>
+      <div class="logo-title">Hantavirus Monitor</div>
+      <div class="logo-sub">MV Hondius — Brote Atlántico 2026</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      EN VIVO
+    </div>
+    <div class="last-update" id="last-update">Actualizado: --:--</div>
+  </div>
+</header>
+
+<nav>
+  <button class="nav-btn active" data-view="overview">Resumen</button>
+  <button class="nav-btn" data-view="countries">Países</button>
+  <button class="nav-btn" data-view="timeline">Cronología</button>
+  <button class="nav-btn" data-view="info">Información médica</button>
+</nav>
+
+<main>
+
+  <!-- ── OVERVIEW ─────────────────────────────────────────────────────────── -->
+  <div class="view active" id="view-overview">
+
+    <div class="risk-banner green" id="risk-banner">
+      <div class="risk-icon">OMS</div>
+      <div class="risk-text">
+        <strong>Cargando estado de alerta…</strong>
+      </div>
+    </div>
+
+    <div class="metrics-row">
+      <div class="metric red">
+        <div class="metric-label">Fallecidos</div>
+        <div class="metric-value" id="m-deaths">—</div>
+        <div class="metric-delta">Confirmados</div>
+      </div>
+      <div class="metric amber">
+        <div class="metric-label">Confirmados</div>
+        <div class="metric-value" id="m-confirmed">—</div>
+        <div class="metric-delta">Labs Suiza + Sudáfrica</div>
+      </div>
+      <div class="metric blue">
+        <div class="metric-label">Sospechosos</div>
+        <div class="metric-value" id="m-suspected">—</div>
+        <div class="metric-delta">En evaluación</div>
+      </div>
+      <div class="metric gray">
+        <div class="metric-label">Cuarentena</div>
+        <div class="metric-value" id="m-quarantine">—</div>
+        <div class="metric-delta">Pasajeros monitorizados</div>
+      </div>
+      <div class="metric green">
+        <div class="metric-label">Países</div>
+        <div class="metric-value" id="m-countries">—</div>
+        <div class="metric-delta">Con vigilancia activa</div>
+      </div>
+    </div>
+
+    <div class="map-section">
+      <div class="map-card">
+        <div class="card-header">
+          <span class="card-title">Distribución geográfica</span>
+          <span class="card-title" style="color:var(--text3)">Clic en marcador para detalles</span>
+        </div>
+        <div id="map"></div>
+      </div>
+
+      <div class="map-card">
+        <div class="card-header">
+          <span class="card-title">Estado por ubicación</span>
+        </div>
+        <div class="country-list" id="country-list-overview"></div>
+      </div>
+    </div>
+
+    <div class="bottom-grid">
+      <div class="map-card">
+        <div class="card-header">
+          <span class="card-title">Evolución de casos confirmados</span>
+        </div>
+        <div class="chart-area">
+          <canvas id="trend-chart"></canvas>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <div class="card-header">
+          <span class="card-title">Datos clave del brote</span>
+        </div>
+        <div class="card-body">
+          <div class="facts" id="facts-panel"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COUNTRIES ─────────────────────────────────────────────────────────── -->
+  <div class="view" id="view-countries">
+    <div class="map-card">
+      <div class="card-header">
+        <span class="card-title">Situación por país — detalle</span>
+        <span class="card-title" style="color:var(--text3)">Clic en columna para ordenar</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th class="th-sort" data-col="name">Ubicación<span class="sort-indicator"></span></th>
+              <th class="th-sort th-right" data-col="deaths">Fallecidos<span class="sort-indicator"></span></th>
+              <th class="th-sort th-right" data-col="confirmed">Confirmados<span class="sort-indicator"></span></th>
+              <th class="th-sort th-right" data-col="suspected">Sospechosos<span class="sort-indicator"></span></th>
+              <th class="th-sort" data-col="status">Estado<span class="sort-indicator"></span></th>
+              <th style="padding:14px 20px;text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);font-weight:500;border-bottom:1px solid var(--border);background:var(--bg3)">Notas</th>
+            </tr>
+          </thead>
+          <tbody id="countries-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TIMELINE ──────────────────────────────────────────────────────────── -->
+  <div class="view" id="view-timeline">
+    <div class="map-card">
+      <div class="card-header">
+        <span class="card-title">Cronología del brote</span>
+      </div>
+      <div class="card-body">
+        <div class="timeline" id="timeline-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── INFO ──────────────────────────────────────────────────────────────── -->
+  <div class="view" id="view-info">
+    <div class="bottom-grid">
+
+      <div class="map-card">
+        <div class="card-header"><span class="card-title">Síntomas</span></div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact-row">
+              <span class="fact-label">Fase 1 — Inicio (1–5 días)</span>
+              <span class="fact-value">Fiebre, escalofríos, dolor muscular intenso, fatiga</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Fase 2 — Cardiopulmonar</span>
+              <span class="fact-value" style="color:var(--red)">Dificultad respiratoria, tos seca, taquicardia</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Síntomas acompañantes</span>
+              <span class="fact-value">Náuseas, vómitos, dolor abdominal</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Síntomas NO presentes</span>
+              <span class="fact-value" style="color:var(--green)">No hay tos productiva, no hay erupciones</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <div class="card-header"><span class="card-title">Transmisión</span></div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact-row">
+              <span class="fact-label">Vía principal</span>
+              <span class="fact-value">Inhalación de partículas de excrementos de roedores</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Cepa Andes (este caso)</span>
+              <span class="fact-value" style="color:var(--amber)">Transmisión persona-a-persona posible (fluidos)</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Por aire (aerosoles)</span>
+              <span class="fact-value" style="color:var(--green)">No confirmado en cepa Andes</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Por agua o alimentos</span>
+              <span class="fact-value" style="color:var(--green)">No</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <div class="card-header"><span class="card-title">Qué hacer si tienes síntomas</span></div>
+        <div class="card-body">
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-date" style="color:var(--red)">Paso 1</div>
+              <div class="tl-dot red"></div>
+              <div class="tl-text"><strong>Llama al 112 o 012</strong> — No vayas a urgencias sin avisar</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-date" style="color:var(--amber)">Paso 2</div>
+              <div class="tl-dot amber"></div>
+              <div class="tl-text">Informa si <strong>tuviste contacto con el crucero</strong> o pasajeros</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-date" style="color:var(--blue)">Paso 3</div>
+              <div class="tl-dot blue"></div>
+              <div class="tl-text"><strong>Sigue instrucciones</strong> del personal sanitario. No automedicación.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <div class="card-header"><span class="card-title">Fuentes oficiales</span></div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact-row">
+              <span class="fact-label">Ministerio de Sanidad</span>
+              <span class="fact-value"><a href="https://www.sanidad.gob.es" target="_blank" style="color:var(--blue)">sanidad.gob.es</a></span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">OMS</span>
+              <span class="fact-value"><a href="https://www.who.int" target="_blank" style="color:var(--blue)">who.int</a></span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">ECDC (Europa)</span>
+              <span class="fact-value"><a href="https://www.ecdc.europa.eu" target="_blank" style="color:var(--blue)">ecdc.europa.eu</a></span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Urgencias</span>
+              <span class="fact-value" style="color:var(--red);font-family:var(--mono);font-size:15px">112</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Sanidad Madrid</span>
+              <span class="fact-value" style="color:var(--amber);font-family:var(--mono);font-size:15px">012</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="js/map.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
