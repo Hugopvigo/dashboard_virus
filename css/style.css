@@ -93,23 +93,9 @@ header::after {
   display: block;
   mix-blend-mode: screen;
   /* Darken logo bg closer to #0a0c0f so screen-blend removes it fully */
-  filter: brightness(0.72);
+  filter: brightness(0.62);
 }
 
-/* Gradient overlay that fades the PNG edges into the header background */
-.logo-brand::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    var(--bg) 0%,
-    transparent 22%,
-    transparent 78%,
-    var(--bg) 100%
-  );
-  pointer-events: none;
-}
 
 .logo-divider {
   width: 1px;
@@ -777,5 +763,4 @@ table { width: 100%; border-collapse: collapse; font-size: 14px; }
   .nav-btn      { padding: 16px 16px; font-size: 12px; }
   #map          { height: 260px; }
   .logo-brand img { height: 60px; }
-  .logo-brand::after { display: none; }
 }
