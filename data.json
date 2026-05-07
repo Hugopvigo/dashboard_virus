@@ -1,15 +1,15 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-06T22:00:00Z",
-    "alertLevel": "BAJO",
-    "alertColor": "green",
-    "alertText": "La OMS y el Ministerio de Sanidad de España supervisan activamente el brote. No hay transmisión comunitaria confirmada fuera del barco."
+    "lastUpdate": "2026-05-07T12:00:00Z",
+    "alertLevel": "MODERADO",
+    "alertColor": "amber",
+    "alertText": "El MV Hondius se aproxima a Tenerife. Llegada prevista mañana 8 de mayo. Protocolos de cuarentena activados. Caso confirmado en Suiza en estado grave."
   },
   "totals": {
     "deaths": 3,
-    "confirmed": 8,
-    "suspected": 12,
-    "quarantine": 150,
+    "confirmed": 9,
+    "suspected": 14,
+    "quarantine": 148,
     "countries": 5
   },
   "facts": [
@@ -17,7 +17,7 @@
     { "label": "Origen probable",         "value": "Patagonia argentina (pre-embarque)", "color": null },
     { "label": "Periodo de incubación",   "value": "1 a 6 semanas",                      "color": null },
     { "label": "Tasa mortalidad Andes",   "value": "~25–35%",                             "color": "amber" },
-    { "label": "Llegada est. Canarias",   "value": "~8 mayo 2026",                        "color": null },
+    { "label": "Llegada est. Canarias",   "value": "8 mayo 2026 (mañana)",               "color": "red" },
     { "label": "Pasajeros españoles",     "value": "14 (traslado a Torrejón)",            "color": null }
   ],
   "countries": [
@@ -30,38 +30,38 @@
     },
     {
       "name": "MV Hondius",       "flag": "🚢",
-      "lat": 15.3, "lng": -22.8,
-      "deaths": 1, "confirmed": 3, "suspected": 5,
+      "lat": 21.0, "lng": -18.0,
+      "deaths": 1, "confirmed": 4, "suspected": 7,
       "status": "high", "statusText": "Cuarentena activa",
-      "notes": "Rumbo a Granadilla de Abona (Tenerife). ~150 pasajeros."
+      "notes": "A ~700 km de Tenerife. Llegada prevista 8 mayo. 148 pasajeros a bordo."
     },
     {
       "name": "Suiza",            "flag": "🇨🇭",
       "lat": 47.4, "lng": 8.5,
       "deaths": 0, "confirmed": 1, "suspected": 0,
-      "status": "med", "statusText": "Caso aislado",
-      "notes": "Ex-pasajero del barco. Hospitalizado en Zúrich."
+      "status": "high", "statusText": "Estado grave",
+      "notes": "Ex-pasajero hospitalizado en Zúrich en estado crítico. Ventilación mecánica."
     },
     {
       "name": "Sudáfrica",        "flag": "🇿🇦",
       "lat": -26.2, "lng": 28.0,
       "deaths": 0, "confirmed": 1, "suspected": 0,
       "status": "med", "statusText": "Caso aislado",
-      "notes": "Confirmado por laboratorio. Seguimiento activo."
+      "notes": "Confirmado por laboratorio. Seguimiento activo. Estable."
     },
     {
       "name": "España",           "flag": "🇪🇸",
       "lat": 40.4, "lng": -3.7,
       "deaths": 0, "confirmed": 0, "suspected": 7,
-      "status": "low", "statusText": "Vigilancia",
-      "notes": "14 españoles en el barco. Traslado a Torrejón tras llegada."
+      "status": "low", "statusText": "Preparación",
+      "notes": "Hospital de Referencia Nacional activado. 14 españoles serán trasladados a Torrejón."
     },
     {
       "name": "Cabo Verde",       "flag": "🇨🇻",
       "lat": 14.93, "lng": -23.51,
       "deaths": 0, "confirmed": 0, "suspected": 0,
       "status": "none", "statusText": "Sin casos",
-      "notes": "Denegó entrada al barco. Personal médico subió a bordo."
+      "notes": "Denegó entrada al barco. Personal médico subió a bordo para evaluación."
     }
   ],
   "shipRoute": [
@@ -70,7 +70,8 @@
     { "lat": -15.0,  "lng": -35.0,  "label": "Atlántico Central" },
     { "lat": 5.0,    "lng": -26.0,  "label": "Atlántico Norte" },
     { "lat": 14.93,  "lng": -23.51, "label": "Cabo Verde — acceso denegado 4 May" },
-    { "lat": 28.07,  "lng": -16.56, "label": "Tenerife — destino ~8 May" }
+    { "lat": 21.0,   "lng": -18.0,  "label": "Posición actual — 7 May" },
+    { "lat": 28.07,  "lng": -16.56, "label": "Tenerife — destino 8 May" }
   ],
   "timeline": [
     { "date": "20 Mar",   "dot": "gray",  "text": "El <strong>MV Hondius</strong> zarpa de Ushuaia (Argentina) con ~150 pasajeros." },
@@ -80,20 +81,21 @@
     { "date": "4 May",    "dot": "red",   "text": "El barco ancla frente a <strong>Praia (Cabo Verde)</strong>. Cabo Verde deniega entrada. OMS confirma 3 muertos." },
     { "date": "5 May",    "dot": "amber", "text": "Pasajero ex-crucero da positivo en <strong>Suiza</strong>. España autoriza atraque en Canarias." },
     { "date": "6 May",    "dot": "amber", "text": "Ministra Mónica García confirma llegada a <strong>Granadilla de Abona (Tenerife)</strong>. Españoles irán a Torrejón." },
-    { "date": "~8 May",   "dot": "blue",  "text": "<strong>Llegada estimada</strong> a Tenerife. Protocolos de cuarentena activados." }
+    { "date": "7 May",    "dot": "red",   "text": "<strong>Nuevo confirmado a bordo</strong>. Total: 4 casos en el barco. Caso suizo empeora. Hospital de Referencia Nacional activado." },
+    { "date": "~8 May",   "dot": "blue",  "text": "<strong>Llegada prevista mañana</strong> a Granadilla de Abona (Tenerife). Zona de exclusión sanitaria preparada." }
   ],
   "newsSources": [
-    { "name": "El País",   "color": "#4488ff", "url": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/ciencia/portada" },
-    { "name": "El Mundo",  "color": "#ffaa00", "url": "https://e00-elmundo.uecdn.es/elmundo/rss/salud.xml" },
-    { "name": "20min",     "color": "#ff4444", "url": "https://www.20minutos.es/rss/salud/" },
-    { "name": "Reuters",   "color": "#cc88ff", "url": "https://feeds.reuters.com/reuters/healthNews" },
-    { "name": "OMS Brotes","color": "#00cc77", "url": "https://www.who.int/feeds/entity/csr/don/en/rss.xml" },
-    { "name": "ProMED",    "color": "#ff8800", "url": "https://promedmail.org/feed/" }
+    { "name": "El País",        "color": "#4488ff", "url": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/ciencia/portada" },
+    { "name": "20min",          "color": "#ff4444", "url": "https://www.20minutos.es/rss/salud/" },
+    { "name": "ABC Ciencia",    "color": "#ffaa00", "url": "https://www.abc.es/rss/feeds/abc_Ciencia.xml" },
+    { "name": "La Vanguardia",  "color": "#cc88ff", "url": "https://www.lavanguardia.com/rss/salud.xml" },
+    { "name": "BBC Health",     "color": "#00cc77", "url": "https://feeds.bbci.co.uk/news/health/rss.xml" },
+    { "name": "El Mundo",       "color": "#ff8800", "url": "https://www.elmundo.es/rss/salud.xml" }
   ],
 
   "trend": {
-    "labels":    ["24 Abr", "26 Abr", "28 Abr", "30 Abr", "2 May", "4 May", "5 May", "6 May"],
-    "confirmed": [0, 1, 2, 3, 5, 6, 7, 8],
-    "deaths":    [0, 1, 2, 2, 3, 3, 3, 3]
+    "labels":    ["24 Abr", "26 Abr", "28 Abr", "30 Abr", "2 May", "4 May", "5 May", "6 May", "7 May"],
+    "confirmed": [0, 1, 2, 3, 5, 6, 7, 8, 9],
+    "deaths":    [0, 1, 2, 2, 3, 3, 3, 3, 3]
   }
 }

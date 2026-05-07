@@ -1,6 +1,6 @@
 /* news.js — RSS news feed via rss2json */
 
-const RSS2JSON = 'https://api.rss2json.com/v1/api.json?count=8&rss_url=';
+const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
 
 let newsLoaded = false;
 let allArticles = [];
