@@ -3,13 +3,19 @@
 let appData = null;
 let sortState = { col: null, dir: 1 };
 
+// ── Data fetching ─────────────────────────────────────────────────────────────
+
+async function loadData() {
+  const res = await fetch('data.json?_=' + Date.now());
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
 // ── Boot ──────────────────────────────────────────────────────────────────────
 
 async function boot() {
   try {
-    const res = await fetch('data.json');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    appData = await res.json();
+    appData = await loadData();
   } catch (e) {
     console.error('[Dashboard] Could not load data.json:', e);
     return;
@@ -30,8 +36,44 @@ async function boot() {
 
   // News loads in background — ready when user clicks the tab
   initNews(appData);
+
+  // Auto-refresh all data every 5 minutes
+  setInterval(refreshData, 5 * 60 * 1000);
 }
 
+// ── Refresh (re-fetches data.json + re-renders everything) ────────────────────
+
+async function refreshData() {
+  const btn = document.getElementById('news-refresh-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '↺ Cargando…'; }
+
+  try {
+    appData = await loadData();
+  } catch (e) {
+    console.error('[Dashboard] Refresh failed:', e);
+    if (btn) { btn.disabled = false; btn.textContent = '↺ Actualizar'; }
+    return;
+  }
+
+  applyMeta(appData.meta);
+  buildCountryListOverview(appData);
+  buildFacts(appData.facts);
+  buildTimeline(appData);
+  buildCountriesTable(appData);
+  initChart(appData);
+  animateCounters(appData.totals);
+  updateClock();
+
+  // Re-init map (handles its own cleanup internally)
+  setTimeout(() => initMap(appData), 60);
+
+  // Reset and reload news
+  newsLoaded = false;
+  allArticles = [];
+  initNews(appData);
+
+  if (btn) { btn.disabled = false; btn.textContent = '↺ Actualizar'; }
+}
 
 // ── Meta / banner ─────────────────────────────────────────────────────────────
 
@@ -194,11 +236,7 @@ function refreshSortHeaders() {
 function initNav() {
   const refreshBtn = document.getElementById('news-refresh-btn');
   if (refreshBtn) {
-    refreshBtn.addEventListener('click', () => {
-      newsLoaded = false;
-      allArticles = [];
-      initNews(appData);
-    });
+    refreshBtn.addEventListener('click', refreshData);
   }
 
   document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -229,7 +267,7 @@ function initNav() {
 function updateClock() {
   const now = new Date();
   const el  = document.getElementById('last-update');
-  if (el) el.textContent = `Actualizado: ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  if (el) el.textContent = `Comprobado: ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
