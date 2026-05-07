@@ -97,11 +97,10 @@ header::after {
 .header-logo-wrap::after  { right: 0; background: linear-gradient(to left,  #000, transparent); }
 
 .header-logo-img {
-  height: 88px;
-  max-width: 720px;
+  height: 160px;
+  max-width: 900px;
   width: 100%;
-  object-fit: cover;
-  object-position: center;
+  object-fit: contain;
   display: block;
 }
 
@@ -165,9 +164,9 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg2);
+  background: #000;
   position: sticky;
-  top: 124px;
+  top: 200px;
   z-index: 999;
 }
 
@@ -763,10 +762,10 @@ table { width: 100%; border-collapse: collapse; font-size: 14px; }
   .map-section  { grid-template-columns: 1fr; }
   .bottom-grid  { grid-template-columns: 1fr; }
   .news-grid    { grid-template-columns: 1fr; }
-  nav                { padding: 0 16px; top: 102px; }
+  nav                { padding: 0 16px; top: 148px; }
   .nav-btn           { padding: 16px 16px; font-size: 12px; }
   #map               { height: 260px; }
-  .header-logo-img   { height: 62px; }
+  .header-logo-img   { height: 100px; }
   .header-bottom     { gap: 10px; padding: 6px 16px 8px; flex-wrap: wrap; justify-content: center; }
   .header-title      { font-size: 11px; letter-spacing: 0.15em; }
   .last-update       { font-size: 10px; }
