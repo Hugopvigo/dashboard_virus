@@ -74,8 +74,8 @@
       "name": "Israel",           "flag": "🇮🇱", "code": "il",
       "lat": 31.0, "lng": 34.9,
       "deaths": 0, "confirmed": 1, "suspected": 0,
-      "status": "low", "statusText": "Caso no vinculado",
-      "notes": "Primer caso confirmado en Israel. Cepa europea (no Andes). Infectado en Europa del Este hace meses. Paciente estable, sin UCI. No relacionado con el MV Hondius."
+      "status": "med", "statusText": "Primer caso",
+      "notes": "Primer caso confirmado. Pasajero ex-crucero hospitalizado. Autoridades activan rastreo de contactos."
     }
   ],
   "shipRoute": [
