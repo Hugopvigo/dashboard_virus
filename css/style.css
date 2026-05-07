@@ -164,6 +164,7 @@ nav {
   padding: 0 32px;
   display: flex;
   align-items: center;
+  justify-content: center;
   background: var(--bg2);
   position: sticky;
   top: 124px;
