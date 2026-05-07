@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hantavirus Monitor — MV Hondius</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #0a0c0f;
+    --bg2: #111418;
+    --bg3: #181c22;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.15);
+    --text: #e8eaed;
+    --text2: #8a9099;
+    --text3: #4a5060;
+    --red: #ff4444;
+    --red-dim: rgba(255,68,68,0.12);
+    --amber: #ffaa00;
+    --amber-dim: rgba(255,170,0,0.12);
+    --green: #00cc77;
+    --green-dim: rgba(0,204,119,0.12);
+    --blue: #4488ff;
+    --blue-dim: rgba(68,136,255,0.10);
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo-brand img {
+    height: 36px;
+    width: auto;
+    display: block;
+    border-radius: 6px;
+  }
+
+  .logo-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border2);
+    flex-shrink: 0;
+  }
+
+  .logo-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--red);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255,68,68,0.4); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(255,68,68,0); }
+  }
+
+  .logo-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .logo-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.05em;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .live-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    animation: blink 1.2s infinite;
+  }
+
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  .last-update {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  /* NAV */
+  nav {
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    gap: 0;
+    background: var(--bg);
+  }
+
+  .nav-btn {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 12px 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .nav-btn:hover { color: var(--text2); }
+  .nav-btn.active { color: var(--text); border-bottom-color: var(--red); }
+
+  /* MAIN */
+  main {
+    padding: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* METRICS ROW */
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+
+  .metric {
+    background: var(--bg2);
+    padding: 20px 24px;
+    position: relative;
+  }
+
+  .metric::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .metric.red::before { background: var(--red); }
+  .metric.amber::before { background: var(--amber); }
+  .metric.blue::before { background: var(--blue); }
+  .metric.green::before { background: var(--green); }
+  .metric.gray::before { background: var(--text3); }
+
+  .metric-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 10px;
+  }
+
+  .metric-value {
+    font-family: var(--mono);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .metric.red .metric-value { color: var(--red); }
+  .metric.amber .metric-value { color: var(--amber); }
+  .metric.blue .metric-value { color: var(--blue); }
+  .metric.green .metric-value { color: var(--green); }
+  .metric.gray .metric-value { color: var(--text2); }
+
+  .metric-delta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  /* MAP */
+  .map-section {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  .map-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text2);
+  }
+
+  .card-body { padding: 20px; }
+
+  /* SVG MAP */
+  #world-map {
+    width: 100%;
+    height: 300px;
+    display: block;
+  }
+
+  .country-path {
+    fill: var(--bg3);
+    stroke: var(--border2);
+    stroke-width: 0.5;
+    transition: fill 0.3s;
+    cursor: pointer;
+  }
+
+  .country-path:hover { fill: rgba(255,255,255,0.05); }
+  .country-path.affected-high { fill: var(--red-dim); stroke: var(--red); stroke-width: 1; }
+  .country-path.affected-med { fill: var(--amber-dim); stroke: var(--amber); stroke-width: 1; }
+  .country-path.affected-low { fill: var(--blue-dim); stroke: var(--blue); stroke-width: 1; }
+
+  /* COUNTRY LIST */
+  .country-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
+
+  .country-item {
+    background: var(--bg2);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .country-item:hover { background: var(--bg3); }
+  .country-item.selected { background: rgba(255,68,68,0.06); }
+
+  .country-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .country-status {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+  }
+
+  .country-badge {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  .badge-red { background: var(--red-dim); color: var(--red); }
+  .badge-amber { background: var(--amber-dim); color: var(--amber); }
+  .badge-blue { background: var(--blue-dim); color: var(--blue); }
+  .badge-gray { background: rgba(255,255,255,0.05); color: var(--text3); }
+
+  /* BOTTOM GRID */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  /* TIMELINE */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+
+  .tl-item {
+    display: flex;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .tl-item:last-child { border-bottom: none; }
+
+  .tl-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    min-width: 56px;
+    padding-top: 2px;
+  }
+
+  .tl-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border2);
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.amber { background: var(--amber); }
+  .tl-dot.blue { background: var(--blue); }
+
+  .tl-text {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .tl-text strong { color: var(--text); font-weight: 500; }
+
+  /* FACTS */
+  .facts { display: flex; flex-direction: column; gap: 12px; }
+
+  .fact-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .fact-row:last-child { border-bottom: none; }
+
+  .fact-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .fact-value {
+    font-size: 13px;
+    color: var(--text);
+    text-align: right;
+    max-width: 55%;
+  }
+
+  /* RISK BANNER */
+  .risk-banner {
+    background: var(--green-dim);
+    border: 1px solid rgba(0,204,119,0.2);
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .risk-icon {
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .risk-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .risk-text strong { color: var(--green); }
+
+  /* CHART AREA */
+  .chart-area {
+    padding: 20px;
+    height: 180px;
+    position: relative;
+  }
+
+  canvas { display: block; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  /* TOOLTIP */
+  .tooltip {
+    position: fixed;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .tooltip.show { opacity: 1; }
+
+  @media (max-width: 900px) {
+    main { padding: 16px; }
+    .metrics-row { grid-template-columns: repeat(2, 1fr); }
+    .map-section { grid-template-columns: 1fr; }
+    .bottom-grid { grid-template-columns: 1fr; }
+    header { padding: 12px 16px; }
+    nav { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-brand">
+      <img src="logo.png" alt="MugreCorp">
+    </div>
+    <div class="logo-divider"></div>
+    <div class="logo-dot"></div>
+    <div>
+      <div class="logo-title">Hantavirus Monitor</div>
+      <div class="logo-sub">MV Hondius — Brote Atlántico 2026</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      EN VIVO
+    </div>
+    <div class="last-update" id="last-update">Actualizado: --:--</div>
+  </div>
+</header>
+
+<nav>
+  <button class="nav-btn active" data-view="overview">Resumen</button>
+  <button class="nav-btn" data-view="countries">Países</button>
+  <button class="nav-btn" data-view="timeline">Cronología</button>
+  <button class="nav-btn" data-view="info">Información médica</button>
+</nav>
+
+<div class="tooltip" id="tooltip"></div>
+
+<main>
+
+  <!-- OVERVIEW -->
+  <div class="view active" id="view-overview">
+
+    <div class="risk-banner">
+      <div class="risk-icon">OMS</div>
+      <div class="risk-text">
+        <strong>Riesgo para población general: BAJO</strong><br>
+        La OMS y el Ministerio de Sanidad de España supervisan activamente el brote. No hay transmisión comunitaria confirmada fuera del barco.
+      </div>
+    </div>
+
+    <div class="metrics-row">
+      <div class="metric red">
+        <div class="metric-label">Fallecidos</div>
+        <div class="metric-value" id="m-deaths">3</div>
+        <div class="metric-delta">Confirmados</div>
+      </div>
+      <div class="metric amber">
+        <div class="metric-label">Confirmados</div>
+        <div class="metric-value" id="m-confirmed">8</div>
+        <div class="metric-delta">Labs Suiza + Sudáfrica</div>
+      </div>
+      <div class="metric blue">
+        <div class="metric-label">Sospechosos</div>
+        <div class="metric-value" id="m-suspected">12</div>
+        <div class="metric-delta">En evaluación</div>
+      </div>
+      <div class="metric gray">
+        <div class="metric-label">Cuarentena</div>
+        <div class="metric-value" id="m-quarantine">~150</div>
+        <div class="metric-delta">Pasajeros monitorizados</div>
+      </div>
+      <div class="metric green">
+        <div class="metric-label">Países</div>
+        <div class="metric-value" id="m-countries">5</div>
+        <div class="metric-delta">Con vigilancia activa</div>
+      </div>
+    </div>
+
+    <div class="map-section">
+      <div class="map-card">
+        <div class="card-header">
+          <span class="card-title">Distribución geográfica</span>
+          <span class="card-title" style="color:var(--text3)">Haz clic en un país</span>
+        </div>
+        <div style="padding:20px">
+          <svg id="world-map" viewBox="0 0 900 450" xmlns="http://www.w3.org/2000/svg">
+            <!-- Simplified world map paths -->
+            <!-- Europe -->
+            <path class="country-path affected-low" id="map-spain" d="M380 140 L420 138 L430 148 L425 162 L415 168 L395 165 L378 155 Z" data-country="España"/>
+            <path class="country-path affected-med" id="map-switzerland" d="M432 132 L445 130 L450 138 L443 144 L432 142 Z" data-country="Suiza"/>
+            <!-- Africa -->
+            <path class="country-path" id="map-caboverde" d="M345 220 L352 218 L355 225 L349 228 Z" data-country="Cabo Verde"/>
+            <path class="country-path affected-med" id="map-southafrica" d="M450 340 L490 330 L510 345 L505 375 L470 385 L445 375 L440 355 Z" data-country="Sudáfrica"/>
+            <!-- South America -->
+            <path class="country-path affected-high" id="map-argentina" d="M220 300 L255 290 L268 310 L270 360 L260 400 L240 420 L220 410 L210 380 L208 340 Z" data-country="Argentina"/>
+
+            <!-- Generic continents as background shapes -->
+            <!-- North America -->
+            <path class="country-path" d="M50 80 L180 70 L210 100 L220 150 L190 180 L150 200 L100 195 L60 170 L40 130 Z"/>
+            <!-- Central+South America -->
+            <path class="country-path" d="M140 200 L180 195 L210 215 L215 260 L200 300 L180 290 L155 300 L140 350 L120 360 L110 310 L115 250 L130 220 Z"/>
+            <!-- Europe general -->
+            <path class="country-path" d="M360 80 L500 75 L520 100 L510 140 L480 155 L440 150 L410 140 L365 145 L355 120 Z"/>
+            <!-- Africa general -->
+            <path class="country-path" d="M380 185 L500 180 L530 210 L535 280 L520 350 L490 390 L450 395 L410 375 L385 330 L370 270 L365 220 Z"/>
+            <!-- Asia -->
+            <path class="country-path" d="M520 70 L750 65 L790 90 L800 140 L780 175 L720 190 L650 200 L570 185 L530 165 L515 130 Z"/>
+            <!-- Oceania -->
+            <path class="country-path" d="M700 280 L780 270 L820 290 L825 340 L790 360 L740 350 L700 330 Z"/>
+
+            <!-- Affected markers -->
+            <circle cx="238" cy="355" r="8" fill="var(--red)" opacity="0.3" class="pulse-circle"/>
+            <circle cx="238" cy="355" r="4" fill="var(--red)"/>
+            <circle cx="440" cy="134" r="6" fill="var(--amber)" opacity="0.3"/>
+            <circle cx="440" cy="134" r="3" fill="var(--amber)"/>
+            <circle cx="478" cy="358" r="6" fill="var(--amber)" opacity="0.3"/>
+            <circle cx="478" cy="358" r="3" fill="var(--amber)"/>
+            <circle cx="400" cy="152" r="6" fill="var(--blue)" opacity="0.3"/>
+            <circle cx="400" cy="152" r="3" fill="var(--blue)"/>
+            <!-- Boat position -->
+            <circle cx="350" cy="222" r="6" fill="white" opacity="0.2"/>
+            <circle cx="350" cy="222" r="3" fill="white" opacity="0.7"/>
+            <text x="355" y="218" fill="rgba(255,255,255,0.5)" font-size="9" font-family="monospace">MV Hondius</text>
+
+            <!-- Route line -->
+            <path d="M238 355 Q280 280 350 222 Q390 190 400 152" stroke="rgba(255,68,68,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4 3"/>
+            <path d="M350 222 Q390 195 440 134" stroke="rgba(255,170,0,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4 3"/>
+            <path d="M350 222 Q410 240 478 358" stroke="rgba(255,170,0,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4 3"/>
+
+            <!-- Legend -->
+            <rect x="20" y="400" width="10" height="10" rx="2" fill="var(--red)" opacity="0.7"/>
+            <text x="34" y="409" fill="rgba(255,255,255,0.5)" font-size="10" font-family="monospace">Brote activo</text>
+            <rect x="120" y="400" width="10" height="10" rx="2" fill="var(--amber)" opacity="0.7"/>
+            <text x="134" y="409" fill="rgba(255,255,255,0.5)" font-size="10" font-family="monospace">Casos confirmados</text>
+            <rect x="260" y="400" width="10" height="10" rx="2" fill="var(--blue)" opacity="0.7"/>
+            <text x="274" y="409" fill="rgba(255,255,255,0.5)" font-size="10" font-family="monospace">Vigilancia activa</text>
+            <circle cx="24" cy="420" r="4" fill="white" opacity="0.5"/>
+            <text x="34" y="424" fill="rgba(255,255,255,0.5)" font-size="10" font-family="monospace">MV Hondius (en ruta)</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <div class="card-header"><span class="card-title">Estado por ubicación</span></div>
+        <div class="country-list" id="country-list-overview">
+          <div class="country-item selected">
+            <div>
+              <div class="country-name">Argentina</div>
+              <div class="country-status">Brote inicial confirmado</div>
+            </div>
+            <span class="country-badge badge-red">3 casos</span>
+          </div>
+          <div class="country-item">
+            <div>
+              <div class="country-name">MV Hondius</div>
+              <div class="country-status">Cuarentena — rumbo a Canarias</div>
+            </div>
+            <span class="country-badge badge-red">3 casos</span>
+          </div>
+          <div class="country-item">
+            <div>
+              <div class="country-name">Suiza</div>
+              <div class="country-status">Pasajero ex-crucero</div>
+            </div>
+            <span class="country-badge badge-amber">1 caso</span>
+          </div>
+          <div class="country-item">
+            <div>
+              <div class="country-name">Sudáfrica</div>
+              <div class="country-status">Confirmación de laboratorio</div>
+            </div>
+            <span class="country-badge badge-amber">1 caso</span>
+          </div>
+          <div class="country-item">
+            <div>
+              <div class="country-name">España</div>
+              <div class="country-status">Vigilancia activa — 0 casos</div>
+            </div>
+            <span class="country-badge badge-blue">Vigilancia</span>
+          </div>
+          <div class="country-item">
+            <div>
+              <div class="country-name">Cabo Verde</div>
+              <div class="country-status">Barco retenido. Denegó entrada</div>
+            </div>
+            <span class="country-badge badge-gray">0 casos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-grid">
+      <div class="map-card">
+        <div class="card-header"><span class="card-title">Evolución de casos confirmados</span></div>
+        <div class="chart-area">
+          <canvas id="trend-chart"></canvas>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <div class="card-header"><span class="card-title">Datos clave del brote</span></div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact-row">
+              <span class="fact-label">Cepa identificada</span>
+              <span class="fact-value">Andes (transmisible entre humanos)</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Origen probable</span>
+              <span class="fact-value">Patagonia argentina (pre-embarque)</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Periodo de incubación</span>
+              <span class="fact-value">1 a 6 semanas</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Tasa mortalidad Andes</span>
+              <span class="fact-value" style="color:var(--amber)">~25–35%</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Llegada estimada Canarias</span>
+              <span class="fact-value">~8 mayo 2026</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Pasajeros españoles</span>
+              <span class="fact-value">14 (traslado a Torrejón)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COUNTRIES VIEW -->
+  <div class="view" id="view-countries">
+    <div class="map-card" style="margin-bottom:24px">
+      <div class="card-header"><span class="card-title">Situación por país — detalle</span></div>
+      <div style="overflow-x:auto">
+        <table style="width:100%; border-collapse:collapse; font-size:13px;">
+          <thead>
+            <tr style="background:var(--bg3)">
+              <th style="padding:14px 20px;text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);font-weight:500;border-bottom:1px solid var(--border)">Ubicación</th>
+              <th style="padding:14px 20px;text-align:right;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);font-weight:500;border-bottom:1px solid var(--border)">Fallecidos</th>
+              <th style="padding:14px 20px;text-align:right;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);font-weight:500;border-bottom:1px solid var(--border)">Confirmados</th>
+              <th style="padding:14px 20px;text-align:right;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);font-weight:500;border-bottom:1px solid var(--border)">Sospechosos</th>
+              <th style="padding:14px 20px;text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);font-weight:500;border-bottom:1px solid var(--border)">Estado</th>
+              <th style="padding:14px 20px;text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);font-weight:500;border-bottom:1px solid var(--border)">Notas</th>
+            </tr>
+          </thead>
+          <tbody id="countries-table-body">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE VIEW -->
+  <div class="view" id="view-timeline">
+    <div class="map-card">
+      <div class="card-header"><span class="card-title">Cronología del brote</span></div>
+      <div class="card-body">
+        <div class="timeline" id="timeline-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO VIEW -->
+  <div class="view" id="view-info">
+    <div class="bottom-grid">
+      <div class="map-card">
+        <div class="card-header"><span class="card-title">Síntomas</span></div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact-row">
+              <span class="fact-label">Fase 1 — Inicio (1-5 días)</span>
+              <span class="fact-value">Fiebre, escalofríos, dolor muscular intenso, fatiga</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Fase 2 — Cardiopulmonar</span>
+              <span class="fact-value" style="color:var(--red)">Dificultad respiratoria, tos seca, taquicardia</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Síntomas acompañantes</span>
+              <span class="fact-value">Náuseas, vómitos, dolor abdominal</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Síntomas NO presentes</span>
+              <span class="fact-value" style="color:var(--green)">No hay tos productiva, no hay erupciones</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <div class="card-header"><span class="card-title">Transmisión</span></div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact-row">
+              <span class="fact-label">Vía principal</span>
+              <span class="fact-value">Inhalación de partículas de excrementos de roedores</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Cepa Andes (este caso)</span>
+              <span class="fact-value" style="color:var(--amber)">Transmisión persona-a-persona posible (fluidos)</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Por aire (aerosoles)</span>
+              <span class="fact-value" style="color:var(--green)">No confirmado en cepa Andes</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Por agua o alimentos</span>
+              <span class="fact-value" style="color:var(--green)">No</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <div class="card-header"><span class="card-title">Qué hacer si tienes síntomas</span></div>
+        <div class="card-body">
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-date" style="color:var(--red)">Paso 1</div>
+              <div class="tl-dot red"></div>
+              <div class="tl-text"><strong>Llama al 112 o 012</strong> — No vayas a urgencias sin avisar</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-date" style="color:var(--amber)">Paso 2</div>
+              <div class="tl-dot amber"></div>
+              <div class="tl-text">Informa si <strong>tuviste contacto con el crucero</strong> o pasajeros</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-date" style="color:var(--blue)">Paso 3</div>
+              <div class="tl-dot blue"></div>
+              <div class="tl-text"><strong>Sigue instrucciones</strong> del personal sanitario. No automedicación.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <div class="card-header"><span class="card-title">Fuentes oficiales</span></div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact-row">
+              <span class="fact-label">Ministerio de Sanidad</span>
+              <span class="fact-value"><a href="https://www.sanidad.gob.es" style="color:var(--blue)">sanidad.gob.es</a></span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">OMS</span>
+              <span class="fact-value"><a href="https://www.who.int" style="color:var(--blue)">who.int</a></span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">ECDC (Europa)</span>
+              <span class="fact-value"><a href="https://www.ecdc.europa.eu" style="color:var(--blue)">ecdc.europa.eu</a></span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Urgencias</span>
+              <span class="fact-value" style="color:var(--red);font-family:var(--mono);font-size:15px">112</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label">Sanidad Madrid</span>
+              <span class="fact-value" style="color:var(--amber);font-family:var(--mono);font-size:15px">012</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const DATA = {
+  countries: [
+    { name: 'Argentina', flag: '🇦🇷', deaths: 2, confirmed: 3, suspected: 0, status: 'high', statusText: 'Brote activo', notes: 'Origen probable. Patagonia. Contagio previo al embarque.' },
+    { name: 'MV Hondius (crucero)', flag: '🚢', deaths: 1, confirmed: 3, suspected: 5, status: 'high', statusText: 'Cuarentena activa', notes: 'Rumbo a Granadilla de Abona (Tenerife). ~150 pasajeros.' },
+    { name: 'Suiza', flag: '🇨🇭', deaths: 0, confirmed: 1, suspected: 0, status: 'med', statusText: 'Caso aislado', notes: 'Ex-pasajero del barco. Hospitalizado en Zúrich.' },
+    { name: 'Sudáfrica', flag: '🇿🇦', deaths: 0, confirmed: 1, suspected: 0, status: 'med', statusText: 'Caso aislado', notes: 'Confirmado por laboratorio. Seguimiento activo.' },
+    { name: 'España', flag: '🇪🇸', deaths: 0, confirmed: 0, suspected: 7, status: 'low', statusText: 'Vigilancia', notes: '14 españoles en el barco. Traslado a Torrejón tras llegada.' },
+    { name: 'Cabo Verde', flag: '🇨🇻', deaths: 0, confirmed: 0, suspected: 0, status: 'none', statusText: 'Sin casos', notes: 'Denegó entrada al barco. Personal médico subió a bordo.' },
+  ],
+  timeline: [
+    { date: '20 Mar', dot: 'gray', text: 'El <strong>MV Hondius</strong> zarpa de Ushuaia (Argentina) con ~150 pasajeros.' },
+    { date: 'Abr 1', dot: 'gray', text: 'Regresa a Ushuaia y vuelve a zarpar. Segunda etapa del viaje.' },
+    { date: 'Abr 1-20', dot: 'amber', text: 'Primeros pasajeros desarrollan síntomas. Período de incubación en curso.' },
+    { date: '~26 Abr', dot: 'red', text: '<strong>Primeras muertes</strong> a bordo. Pareja neerlandesa fallece. Alarma médica.' },
+    { date: '4 May', dot: 'red', text: 'El barco ancla frente a <strong>Praia (Cabo Verde)</strong>. Cabo Verde deniega entrada. OMS confirma 3 muertos.' },
+    { date: '5 May', dot: 'amber', text: 'Pasajero ex-crucero da positivo en <strong>Suiza</strong>. España autoriza atraque en Canarias.' },
+    { date: '6 May', dot: 'amber', text: 'Ministra de Sanidad Mónica García confirma llegada a <strong>Granadilla de Abona (Tenerife)</strong>. Pasajeros españoles irán a Torrejón.' },
+    { date: '~8 May', dot: 'blue', text: '<strong>Llegada estimada</strong> a Tenerife. Protocolos de cuarentena activados.' },
+  ],
+  trend: {
+    labels: ['24 Abr', '26 Abr', '28 Abr', '30 Abr', '2 May', '4 May', '5 May', '6 May'],
+    confirmed: [0, 1, 2, 3, 5, 6, 7, 8],
+    deaths: [0, 1, 2, 2, 3, 3, 3, 3],
+  }
+};
+
+function buildCountriesTable() {
+  const tbody = document.getElementById('countries-table-body');
+  DATA.countries.forEach(c => {
+    const statusColor = { high: 'var(--red)', med: 'var(--amber)', low: 'var(--blue)', none: 'var(--text3)' }[c.status];
+    const row = document.createElement('tr');
+    row.style.borderBottom = '1px solid var(--border)';
+    row.innerHTML = `
+      <td style="padding:14px 20px;color:var(--text);font-weight:500">${c.flag} ${c.name}</td>
+      <td style="padding:14px 20px;text-align:right;font-family:var(--mono);color:${c.deaths > 0 ? 'var(--red)' : 'var(--text3)'};font-weight:600">${c.deaths}</td>
+      <td style="padding:14px 20px;text-align:right;font-family:var(--mono);color:${c.confirmed > 0 ? 'var(--amber)' : 'var(--text3)'};font-weight:600">${c.confirmed}</td>
+      <td style="padding:14px 20px;text-align:right;font-family:var(--mono);color:var(--text2)">${c.suspected}</td>
+      <td style="padding:14px 20px"><span style="font-size:11px;font-family:var(--mono);color:${statusColor};background:${statusColor.replace(')', ',0.1)').replace('var(', 'rgba(').replace('--', '')};padding:4px 10px;border-radius:4px">${c.statusText}</span></td>
+      <td style="padding:14px 20px;color:var(--text2);font-size:12px">${c.notes}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+function buildTimeline() {
+  const list = document.getElementById('timeline-list');
+  DATA.timeline.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'tl-item';
+    el.innerHTML = `
+      <div class="tl-date">${item.date}</div>
+      <div class="tl-dot ${item.dot}"></div>
+      <div class="tl-text">${item.text}</div>
+    `;
+    list.appendChild(el);
+  });
+}
+
+function buildChart() {
+  const canvas = document.getElementById('trend-chart');
+  const parent = canvas.parentElement;
+  canvas.width = parent.clientWidth - 40;
+  canvas.height = 140;
+  const ctx = canvas.getContext('2d');
+  const d = DATA.trend;
+  const w = canvas.width, h = canvas.height;
+  const pad = { top: 10, right: 20, bottom: 30, left: 30 };
+  const gw = w - pad.left - pad.right;
+  const gh = h - pad.top - pad.bottom;
+  const maxV = 10;
+  const xs = d.labels.length;
+
+  ctx.clearRect(0, 0, w, h);
+
+  function xPos(i) { return pad.left + (i / (xs - 1)) * gw; }
+  function yPos(v) { return pad.top + gh - (v / maxV) * gh; }
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 0.5;
+  [0, 2, 4, 6, 8, 10].forEach(v => {
+    const y = yPos(v);
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(w - pad.right, y); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    ctx.font = '10px monospace';
+    ctx.fillText(v, 0, y + 3);
+  });
+
+  function drawLine(data, color) {
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    data.forEach((v, i) => {
+      const x = xPos(i), y = yPos(v);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    data.forEach((v, i) => {
+      ctx.beginPath();
+      ctx.arc(xPos(i), yPos(v), 3, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    });
+  }
+
+  drawLine(d.confirmed, '#ffaa00');
+  drawLine(d.deaths, '#ff4444');
+
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.font = '9px monospace';
+  d.labels.forEach((label, i) => {
+    if (i % 2 === 0) {
+      ctx.fillText(label, xPos(i) - 12, h - 5);
+    }
+  });
+
+  ctx.fillStyle = '#ffaa00';
+  ctx.fillRect(w - 140, 8, 10, 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.font = '10px monospace';
+  ctx.fillText('Confirmados', w - 126, 12);
+
+  ctx.fillStyle = '#ff4444';
+  ctx.fillRect(w - 140, 22, 10, 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.fillText('Fallecidos', w - 126, 26);
+}
+
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  document.getElementById('last-update').textContent = `Actualizado: ${h}:${m}`;
+}
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('view-' + btn.dataset.view).classList.add('active');
+    if (btn.dataset.view === 'overview') buildChart();
+  });
+});
+
+buildCountriesTable();
+buildTimeline();
+buildChart();
+updateClock();
+setInterval(updateClock, 60000);
+window.addEventListener('resize', buildChart);
+</script>
+</body>
+</html>
