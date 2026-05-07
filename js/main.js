@@ -3,15 +3,17 @@
 let appData = null;
 let sortState = { col: null, dir: 1 };
 
-// ── Twemoji ───────────────────────────────────────────────────────────────────
+// ── Flag images ───────────────────────────────────────────────────────────────
 
-function applyTwemoji() {
-  if (typeof twemoji === 'undefined') return;
-  const targets = ['country-list-overview', 'countries-table-body', 'facts-panel', 'timeline-list'];
-  targets.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) twemoji.parse(el, { className: 'emoji' });
-  });
+function flagImg(c) {
+  if (!c.code || c.code === 'ship') {
+    return `<span style="font-size:1.1em">🚢</span>`;
+  }
+  return `<img src="https://flagcdn.com/20x15/${c.code}.png"
+               srcset="https://flagcdn.com/40x30/${c.code}.png 2x"
+               width="20" height="15"
+               alt="${c.name}"
+               style="vertical-align:middle;border-radius:2px;margin-right:2px">`;
 }
 
 // ── Data fetching ─────────────────────────────────────────────────────────────
@@ -48,8 +50,6 @@ async function boot() {
   // News loads in background — ready when user clicks the tab
   initNews(appData);
 
-  applyTwemoji();
-
   // Auto-refresh all data every 5 minutes
   setInterval(refreshData, 5 * 60 * 1000);
 }
@@ -84,8 +84,6 @@ async function refreshData() {
   newsLoaded = false;
   allArticles = [];
   initNews(appData);
-
-  applyTwemoji();
 
   if (btn) { btn.disabled = false; btn.textContent = '↺ Actualizar'; }
 }
@@ -152,7 +150,7 @@ function buildCountryListOverview(data) {
     el.className = `country-item${i === 0 ? ' selected' : ''}`;
     el.innerHTML = `
       <div>
-        <div class="country-name">${c.flag} ${c.name}</div>
+        <div class="country-name">${flagImg(c)} ${c.name}</div>
         <div class="country-status">${c.statusText}</div>
       </div>
       <span class="country-badge ${badgeClass}">${badgeText}</span>
@@ -223,7 +221,7 @@ function buildCountriesTable(data) {
     const row = document.createElement('tr');
     row.style.borderBottom = '1px solid var(--border)';
     row.innerHTML = `
-      <td style="padding:14px 20px;color:var(--text);font-weight:500">${c.flag} ${c.name}</td>
+      <td style="padding:14px 20px;color:var(--text);font-weight:500">${flagImg(c)} ${c.name}</td>
       <td style="padding:14px 20px;text-align:right;font-family:'IBM Plex Mono',monospace;color:${c.deaths > 0 ? 'var(--red)' : 'var(--text3)'};font-weight:600">${c.deaths}</td>
       <td style="padding:14px 20px;text-align:right;font-family:'IBM Plex Mono',monospace;color:${c.confirmed > 0 ? 'var(--amber)' : 'var(--text3)'};font-weight:600">${c.confirmed}</td>
       <td style="padding:14px 20px;text-align:right;font-family:'IBM Plex Mono',monospace;color:var(--text2)">${c.suspected}</td>

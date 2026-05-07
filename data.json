@@ -22,42 +22,42 @@
   ],
   "countries": [
     {
-      "name": "Argentina",        "flag": "🇦🇷",
+      "name": "Argentina",        "flag": "🇦🇷", "code": "ar",
       "lat": -40.0, "lng": -63.5,
       "deaths": 2, "confirmed": 3, "suspected": 0,
       "status": "high", "statusText": "Brote activo",
       "notes": "Origen probable. Patagonia. Contagio previo al embarque."
     },
     {
-      "name": "MV Hondius",       "flag": "🚢",
+      "name": "MV Hondius",       "flag": "🚢", "code": "ship",
       "lat": 21.0, "lng": -18.0,
       "deaths": 1, "confirmed": 4, "suspected": 7,
       "status": "high", "statusText": "Cuarentena activa",
       "notes": "A ~700 km de Tenerife. Llegada prevista 8 mayo. 148 pasajeros a bordo."
     },
     {
-      "name": "Suiza",            "flag": "🇨🇭",
+      "name": "Suiza",            "flag": "🇨🇭", "code": "ch",
       "lat": 47.4, "lng": 8.5,
       "deaths": 0, "confirmed": 1, "suspected": 0,
       "status": "high", "statusText": "Estado grave",
       "notes": "Ex-pasajero hospitalizado en Zúrich en estado crítico. Ventilación mecánica."
     },
     {
-      "name": "Sudáfrica",        "flag": "🇿🇦",
+      "name": "Sudáfrica",        "flag": "🇿🇦", "code": "za",
       "lat": -26.2, "lng": 28.0,
       "deaths": 0, "confirmed": 1, "suspected": 0,
       "status": "med", "statusText": "Caso aislado",
       "notes": "Confirmado por laboratorio. Seguimiento activo. Estable."
     },
     {
-      "name": "España",           "flag": "🇪🇸",
+      "name": "España",           "flag": "🇪🇸", "code": "es",
       "lat": 40.4, "lng": -3.7,
       "deaths": 0, "confirmed": 0, "suspected": 7,
       "status": "low", "statusText": "Preparación",
       "notes": "Hospital de Referencia Nacional activado. 14 españoles serán trasladados a Torrejón."
     },
     {
-      "name": "Cabo Verde",       "flag": "🇨🇻",
+      "name": "Cabo Verde",       "flag": "🇨🇻", "code": "cv",
       "lat": 14.93, "lng": -23.51,
       "deaths": 0, "confirmed": 0, "suspected": 0,
       "status": "none", "statusText": "Sin casos",

@@ -63,7 +63,7 @@ function initMap(data) {
     });
 
     const content = `
-      <div class="popup-title">${c.flag} ${c.name}</div>
+      <div class="popup-title">${flagImg(c)} ${c.name}</div>
       <div class="popup-status" style="color:${col}">${c.statusText}</div>
       <div class="popup-row">
         <span class="popup-label">Fallecidos</span>
