@@ -50,16 +50,13 @@ body::before {
 
 /* ── HEADER ─────────────────────────────────────── */
 header {
-  padding: 20px 32px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  background: var(--bg);
+  background: #000;
   position: sticky;
   top: 0;
   z-index: 1000;
-  /* Epic bottom border: red gradient instead of plain line */
-  border-bottom: none;
 }
 
 header::after {
@@ -77,69 +74,67 @@ header::after {
   );
 }
 
-.logo { display: flex; align-items: center; gap: 18px; }
-
-/* Logo wrapper: fades left+right edges into header bg */
-.logo-brand {
+/* ── Logo image ── */
+.header-logo-wrap {
   position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Fade edges into bg so the logo blends with the page */
+.header-logo-wrap::before,
+.header-logo-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 15%;
+  z-index: 1;
+  pointer-events: none;
+}
+.header-logo-wrap::before { left:  0; background: linear-gradient(to right, #000, transparent); }
+.header-logo-wrap::after  { right: 0; background: linear-gradient(to left,  #000, transparent); }
+
+.header-logo-img {
+  height: 88px;
+  max-width: 720px;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* ── Bottom bar: title + live badge ── */
+.header-bottom {
   display: flex;
   align-items: center;
-  flex-shrink: 0;
+  gap: 16px;
+  padding: 7px 24px 9px;
+  border-top: 1px solid rgba(255,68,68,0.18);
 }
 
-.logo-brand img {
-  height: 126px;
-  width: auto;
-  display: block;
-  mix-blend-mode: screen;
-  /* Darken logo bg closer to #0a0c0f so screen-blend removes it fully */
-  filter: brightness(0.62);
-}
-
-
-.logo-divider {
-  width: 1px;
-  height: 64px;
-  background: var(--border2);
-  flex-shrink: 0;
-}
-
-.logo-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--red);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255,68,68,0.4); }
-  50%       { opacity: 0.7; box-shadow: 0 0 0 6px rgba(255,68,68,0); }
-}
-
-.logo-title {
+.header-title {
   font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text);
 }
 
-.logo-sub {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text3);
-  letter-spacing: 0.05em;
+.header-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+  flex-shrink: 0;
 }
-
-.header-right { display: flex; align-items: center; gap: 24px; }
 
 .live-badge {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 11px;
   color: var(--red);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -151,11 +146,17 @@ header::after {
   border-radius: 50%;
   background: var(--red);
   animation: blink 1.2s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255,68,68,0.4); }
+  50%       { opacity: 0.7; box-shadow: 0 0 0 6px rgba(255,68,68,0); }
 }
 
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-.last-update { font-family: var(--mono); font-size: 12px; color: var(--text3); }
+.last-update { font-family: var(--mono); font-size: 11px; color: var(--text3); }
 
 /* ── NAV ─────────────────────────────────────────── */
 nav {
@@ -165,7 +166,7 @@ nav {
   align-items: center;
   background: var(--bg2);
   position: sticky;
-  top: 166px;
+  top: 124px;
   z-index: 999;
 }
 
@@ -761,9 +762,12 @@ table { width: 100%; border-collapse: collapse; font-size: 14px; }
   .map-section  { grid-template-columns: 1fr; }
   .bottom-grid  { grid-template-columns: 1fr; }
   .news-grid    { grid-template-columns: 1fr; }
-  header        { padding: 12px 16px; }
-  nav           { padding: 0 16px; top: 84px; }
-  .nav-btn      { padding: 16px 16px; font-size: 12px; }
-  #map          { height: 260px; }
-  .logo-brand img { height: 60px; }
+  nav                { padding: 0 16px; top: 102px; }
+  .nav-btn           { padding: 16px 16px; font-size: 12px; }
+  #map               { height: 260px; }
+  .header-logo-img   { height: 62px; }
+  .header-bottom     { gap: 10px; padding: 6px 16px 8px; flex-wrap: wrap; justify-content: center; }
+  .header-title      { font-size: 11px; letter-spacing: 0.15em; }
+  .last-update       { font-size: 10px; }
+  .header-sep        { display: none; }
 }
