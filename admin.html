@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Hantavirus Monitor</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #0a0a0f;
+      --bg2:    #111118;
+      --bg3:    #1a1a25;
+      --border: #2a2a3a;
+      --text:   #e8e8f0;
+      --text2:  #9090a8;
+      --text3:  #555568;
+      --red:    #ff4444;
+      --amber:  #ffaa00;
+      --blue:   #4488ff;
+      --green:  #00cc77;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13px;
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header h1 { font-size: 16px; color: var(--text); }
+    header span { color: var(--red); font-size: 11px; background: #ff444422; border: 1px solid #ff444444; padding: 2px 8px; border-radius: 4px; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+
+    /* Token bar */
+    .token-bar {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .token-bar .field { flex: 1; min-width: 260px; }
+    .token-bar label { display: block; color: var(--text2); font-size: 11px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+    .token-bar input {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 9px 12px;
+    }
+    .token-bar input:focus { outline: none; border-color: var(--blue); }
+
+    /* Buttons */
+    .btn {
+      padding: 9px 20px;
+      border-radius: 6px;
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      transition: opacity .15s;
+      white-space: nowrap;
+    }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-load  { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); }
+    .btn-load:hover:not(:disabled)   { border-color: var(--blue); color: var(--blue); }
+    .btn-pub   { background: var(--green); color: #000; font-weight: 700; }
+    .btn-pub:hover:not(:disabled)    { opacity: .85; }
+    .btn-add   { background: transparent; border: 1px dashed var(--border); color: var(--text3); font-size: 12px; padding: 6px 14px; }
+    .btn-add:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-del   { background: transparent; border: none; color: var(--text3); font-size: 16px; cursor: pointer; padding: 0 4px; line-height: 1; }
+    .btn-del:hover { color: var(--red); }
+
+    /* Status bar */
+    #status-bar {
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-bottom: 24px;
+      display: none;
+    }
+    #status-bar.info    { background: #4488ff22; border: 1px solid #4488ff44; color: var(--blue); display: block; }
+    #status-bar.success { background: #00cc7722; border: 1px solid #00cc7744; color: var(--green); display: block; }
+    #status-bar.error   { background: #ff444422; border: 1px solid #ff444444; color: var(--red); display: block; }
+
+    /* Sections */
+    .section {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .section-header {
+      padding: 14px 20px;
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-header .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+    .section-body { padding: 20px; }
+
+    /* Field grid */
+    .field-grid { display: grid; gap: 14px; }
+    .field-grid.cols2 { grid-template-columns: 1fr 1fr; }
+    .field-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+    .field-grid.cols4 { grid-template-columns: repeat(4, 1fr); }
+    .field-grid.cols5 { grid-template-columns: repeat(5, 1fr); }
+
+    .field label {
+      display: block;
+      color: var(--text2);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 5px;
+    }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 8px 10px;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+    .field textarea { resize: vertical; min-height: 60px; }
+    .field select option { background: var(--bg3); }
+
+    /* Repeatable rows */
+    .repeat-row {
+      display: grid;
+      gap: 10px;
+      align-items: start;
+      padding: 12px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .repeat-row .del-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+    }
+    .timeline-row { grid-template-columns: 100px 80px 1fr 28px; }
+    .fact-row-grid { grid-template-columns: 1fr 1fr 90px 28px; }
+    .country-row  { grid-template-columns: 70px 1fr 60px 60px 60px 80px 60px 28px; }
+
+    .dot-sel { display: flex; gap: 6px; }
+    .dot-opt {
+      width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 10px; transition: border-color .1s;
+    }
+    .dot-opt.selected { border-color: white; }
+    .dot-opt.red   { background: var(--red); }
+    .dot-opt.amber { background: var(--amber); }
+    .dot-opt.gray  { background: #555568; }
+    .dot-opt.blue  { background: var(--blue); }
+
+    /* Trend */
+    .trend-table { width: 100%; border-collapse: collapse; }
+    .trend-table th { color: var(--text2); font-size: 10px; text-transform: uppercase; padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+    .trend-table td { padding: 4px 4px; }
+    .trend-table td input { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; color: var(--text); font-family: inherit; font-size: 12px; padding: 5px 7px; }
+    .trend-table td input:focus { outline: none; border-color: var(--blue); }
+    .trend-table tr:hover td { background: #ffffff05; }
+    .trend-row-del { background: none; border: none; color: var(--text3); cursor: pointer; padding: 0 4px; font-size: 15px; }
+    .trend-row-del:hover { color: var(--red); }
+
+    .actions-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .field-grid.cols3, .field-grid.cols4, .field-grid.cols5 { grid-template-columns: 1fr 1fr; }
+      .country-row { grid-template-columns: 1fr 1fr 1fr 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚙ Admin — Hantavirus Monitor</h1>
+  <span>ACCESO RESTRINGIDO</span>
+</header>
+
+<div class="container">
+
+  <!-- Token + load -->
+  <div class="token-bar">
+    <div class="field">
+      <label>GitHub Personal Access Token</label>
+      <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+    </div>
+    <button class="btn btn-load" id="btn-load" onclick="loadFromGitHub()">⬇ Cargar datos</button>
+  </div>
+
+  <div id="status-bar"></div>
+
+  <!-- FORM (hidden until data is loaded) -->
+  <div id="form-body" style="display:none">
+
+    <!-- Meta -->
+    <div class="section">
+      <div class="section-header"><div class="dot"></div> Banner de alerta</div>
+      <div class="section-body">
+        <div class="field-grid cols3">
+          <div class="field">
+            <label>Nivel de riesgo</label>
+            <select id="meta-alertLevel">
+              <option>BAJO</option>
+              <option>MODERADO</option>
+              <option>ALTO</option>
+              <option>MUY ALTO</option>
+              <option>CRÍTICO</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Color del banner</label>
+            <select id="meta-alertColor">
+              <option value="green">Verde</option>
+              <option value="amber">Ámbar</option>
+              <option value="red">Rojo</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Última actualización (ISO)</label>
+            <input type="text" id="meta-lastUpdate" placeholder="2026-05-07T10:00:00Z">
+          </div>
+        </div>
+        <div class="field" style="margin-top:14px">
+          <label>Texto del banner</label>
+          <textarea id="meta-alertText" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Totals -->
+    <div class="section">
+      <div class="section-header"><div class="dot"></div> Cifras globales</div>
+      <div class="section-body">
+        <div class="field-grid cols5">
+          <div class="field"><label>Muertos</label><input type="number" id="tot-deaths" min="0"></div>
+          <div class="field"><label>Confirmados</label><input type="number" id="tot-confirmed" min="0"></div>
+          <div class="field"><label>Sospechosos</label><input type="number" id="tot-suspected" min="0"></div>
+          <div class="field"><label>Cuarentena</label><input type="number" id="tot-quarantine" min="0"></div>
+          <div class="field"><label>Países</label><input type="number" id="tot-countries" min="0"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Countries -->
+    <div class="section">
+      <div class="section-header"><div class="dot"></div> Países / Entidades</div>
+      <div class="section-body">
+        <div id="countries-list"></div>
+        <button class="btn btn-add" onclick="addCountry()">+ Añadir país</button>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="section">
+      <div class="section-header"><div class="dot"></div> Línea de tiempo</div>
+      <div class="section-body">
+        <div id="timeline-list"></div>
+        <button class="btn btn-add" onclick="addTimelineItem()">+ Añadir evento</button>
+      </div>
+    </div>
+
+    <!-- Facts -->
+    <div class="section">
+      <div class="section-header"><div class="dot"></div> Datos clave (panel lateral)</div>
+      <div class="section-body">
+        <div id="facts-list"></div>
+        <button class="btn btn-add" onclick="addFact()">+ Añadir fila</button>
+      </div>
+    </div>
+
+    <!-- Trend -->
+    <div class="section">
+      <div class="section-header"><div class="dot"></div> Datos de la gráfica (tendencia)</div>
+      <div class="section-body">
+        <table class="trend-table">
+          <thead>
+            <tr>
+              <th>Fecha / etiqueta</th>
+              <th>Confirmados</th>
+              <th>Muertos</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="trend-body"></tbody>
+        </table>
+        <button class="btn btn-add" style="margin-top:10px" onclick="addTrendRow()">+ Añadir punto</button>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn btn-load" onclick="loadFromGitHub()">↺ Recargar</button>
+      <button class="btn btn-pub" id="btn-pub" onclick="publishToGitHub()">▲ Publicar en GitHub</button>
+    </div>
+
+  </div><!-- /form-body -->
+</div><!-- /container -->
+
+<script>
+const OWNER = 'Hugopvigo';
+const REPO  = 'dashboard_virus';
+const FILE  = 'data.json';
+const BRANCH = 'main';
+
+let currentSha = null;
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+function getToken() { return document.getElementById('gh-token').value.trim(); }
+
+function setStatus(msg, type) {
+  const el = document.getElementById('status-bar');
+  el.className = type;
+  el.textContent = msg;
+}
+
+function apiHeaders() {
+  return {
+    'Authorization': 'token ' + getToken(),
+    'Accept': 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json'
+  };
+}
+
+// ── Load ───────────────────────────────────────────────────────────────────
+
+async function loadFromGitHub() {
+  const token = getToken();
+  if (!token) { setStatus('Introduce tu GitHub Personal Access Token.', 'error'); return; }
+
+  const btn = document.getElementById('btn-load');
+  btn.disabled = true;
+  btn.textContent = '⬇ Cargando…';
+  setStatus('Conectando con GitHub…', 'info');
+
+  try {
+    const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}?ref=${BRANCH}&_=${Date.now()}`;
+    const res = await fetch(url, { headers: apiHeaders() });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || 'HTTP ' + res.status);
+    }
+    const json = await res.json();
+    currentSha = json.sha;
+    const data = JSON.parse(atob(json.content.replace(/\n/g, '')));
+
+    // Save token for convenience
+    try { localStorage.setItem('admin_token', token); } catch(_) {}
+
+    populateForm(data);
+    document.getElementById('form-body').style.display = 'block';
+    setStatus('✓ Datos cargados. Última actualización: ' + (data.meta?.lastUpdate || '—'), 'success');
+  } catch(e) {
+    setStatus('Error al cargar: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⬇ Cargar datos';
+  }
+}
+
+// ── Populate ───────────────────────────────────────────────────────────────
+
+function populateForm(data) {
+  const m = data.meta || {};
+  setVal('meta-alertLevel', m.alertLevel);
+  setVal('meta-alertColor', m.alertColor);
+  setVal('meta-alertText',  m.alertText);
+  setVal('meta-lastUpdate', m.lastUpdate);
+
+  const t = data.totals || {};
+  setVal('tot-deaths',     t.deaths);
+  setVal('tot-confirmed',  t.confirmed);
+  setVal('tot-suspected',  t.suspected);
+  setVal('tot-quarantine', t.quarantine);
+  setVal('tot-countries',  t.countries);
+
+  // Countries
+  const cl = document.getElementById('countries-list');
+  cl.innerHTML = '';
+  (data.countries || []).forEach(c => addCountry(c));
+
+  // Timeline
+  const tl = document.getElementById('timeline-list');
+  tl.innerHTML = '';
+  (data.timeline || []).forEach(item => addTimelineItem(item));
+
+  // Facts
+  const fl = document.getElementById('facts-list');
+  fl.innerHTML = '';
+  (data.facts || []).forEach(f => addFact(f));
+
+  // Trend
+  const tb = document.getElementById('trend-body');
+  tb.innerHTML = '';
+  const labels    = data.trend?.labels    || [];
+  const confirmed = data.trend?.confirmed || [];
+  const deaths    = data.trend?.deaths    || [];
+  labels.forEach((lbl, i) => addTrendRow({ label: lbl, confirmed: confirmed[i] ?? 0, deaths: deaths[i] ?? 0 }));
+}
+
+function setVal(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.value = val ?? '';
+}
+
+// ── Countries ──────────────────────────────────────────────────────────────
+
+function addCountry(c = {}) {
+  const row = document.createElement('div');
+  row.className = 'repeat-row country-row';
+  row.innerHTML = `
+    <div class="field"><label>Emoji flag</label><input type="text" class="c-flag" value="${esc(c.flag||'')}"></div>
+    <div class="field"><label>Nombre</label><input type="text" class="c-name" value="${esc(c.name||'')}"></div>
+    <div class="field"><label>Muertos</label><input type="number" class="c-deaths" value="${c.deaths??0}" min="0"></div>
+    <div class="field"><label>Confirm.</label><input type="number" class="c-confirmed" value="${c.confirmed??0}" min="0"></div>
+    <div class="field"><label>Sospech.</label><input type="number" class="c-suspected" value="${c.suspected??0}" min="0"></div>
+    <div class="field"><label>Estado</label>
+      <select class="c-status">
+        <option value="high" ${c.status==='high'?'selected':''}>Alto</option>
+        <option value="med"  ${c.status==='med' ?'selected':''}>Medio</option>
+        <option value="low"  ${c.status==='low' ?'selected':''}>Bajo</option>
+        <option value="none" ${c.status==='none'?'selected':''}>Sin casos</option>
+      </select>
+    </div>
+    <div class="field"><label>Texto estado</label><input type="text" class="c-statusText" value="${esc(c.statusText||'')}"></div>
+    <button class="btn-del del-btn" onclick="this.closest('.repeat-row').remove()" title="Eliminar">×</button>
+    <input type="hidden" class="c-lat" value="${c.lat??0}">
+    <input type="hidden" class="c-lng" value="${c.lng??0}">
+    <div class="field" style="grid-column:1/-1"><label>Notas</label><input type="text" class="c-notes" value="${esc(c.notes||'')}"></div>
+  `;
+  document.getElementById('countries-list').appendChild(row);
+}
+
+// ── Timeline ───────────────────────────────────────────────────────────────
+
+function addTimelineItem(item = {}) {
+  const row = document.createElement('div');
+  row.className = 'repeat-row timeline-row';
+  const dots = ['gray','amber','red','blue'];
+  const dotBtns = dots.map(d =>
+    `<div class="dot-opt ${d} ${item.dot===d?'selected':''}" data-dot="${d}" onclick="selectDot(this)"></div>`
+  ).join('');
+  row.innerHTML = `
+    <div class="field"><label>Fecha</label><input type="text" class="tl-date" value="${esc(item.date||'')}"></div>
+    <div class="field"><label>Color</label><div class="dot-sel">${dotBtns}</div></div>
+    <div class="field"><label>Texto (HTML permitido)</label><input type="text" class="tl-text" value="${esc(item.text||'')}"></div>
+    <button class="btn-del" onclick="this.closest('.repeat-row').remove()" title="Eliminar">×</button>
+  `;
+  document.getElementById('timeline-list').appendChild(row);
+}
+
+function selectDot(el) {
+  el.closest('.dot-sel').querySelectorAll('.dot-opt').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ── Facts ──────────────────────────────────────────────────────────────────
+
+function addFact(f = {}) {
+  const row = document.createElement('div');
+  row.className = 'repeat-row fact-row-grid';
+  row.innerHTML = `
+    <div class="field"><label>Etiqueta</label><input type="text" class="f-label" value="${esc(f.label||'')}"></div>
+    <div class="field"><label>Valor</label><input type="text" class="f-value" value="${esc(f.value||'')}"></div>
+    <div class="field"><label>Color</label>
+      <select class="f-color">
+        <option value="">—</option>
+        <option value="amber" ${f.color==='amber'?'selected':''}>Ámbar</option>
+        <option value="red"   ${f.color==='red'  ?'selected':''}>Rojo</option>
+        <option value="blue"  ${f.color==='blue' ?'selected':''}>Azul</option>
+        <option value="green" ${f.color==='green'?'selected':''}>Verde</option>
+      </select>
+    </div>
+    <button class="btn-del" onclick="this.closest('.repeat-row').remove()" title="Eliminar">×</button>
+  `;
+  document.getElementById('facts-list').appendChild(row);
+}
+
+// ── Trend ──────────────────────────────────────────────────────────────────
+
+function addTrendRow(d = {}) {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="text"   class="tr-label" value="${esc(d.label||'')}"></td>
+    <td><input type="number" class="tr-confirmed" value="${d.confirmed??0}" min="0"></td>
+    <td><input type="number" class="tr-deaths"    value="${d.deaths??0}"    min="0"></td>
+    <td><button class="trend-row-del" onclick="this.closest('tr').remove()">×</button></td>
+  `;
+  document.getElementById('trend-body').appendChild(tr);
+}
+
+// ── Build JSON ─────────────────────────────────────────────────────────────
+
+function buildData() {
+  // Meta
+  const meta = {
+    lastUpdate: document.getElementById('meta-lastUpdate').value || new Date().toISOString(),
+    alertLevel: document.getElementById('meta-alertLevel').value,
+    alertColor: document.getElementById('meta-alertColor').value,
+    alertText:  document.getElementById('meta-alertText').value,
+  };
+
+  // Totals
+  const totals = {
+    deaths:     parseInt(document.getElementById('tot-deaths').value)     || 0,
+    confirmed:  parseInt(document.getElementById('tot-confirmed').value)  || 0,
+    suspected:  parseInt(document.getElementById('tot-suspected').value)  || 0,
+    quarantine: parseInt(document.getElementById('tot-quarantine').value) || 0,
+    countries:  parseInt(document.getElementById('tot-countries').value)  || 0,
+  };
+
+  // Countries
+  const countries = [...document.querySelectorAll('#countries-list .repeat-row')].map(row => ({
+    name:       row.querySelector('.c-name').value,
+    flag:       row.querySelector('.c-flag').value,
+    lat:        parseFloat(row.querySelector('.c-lat').value) || 0,
+    lng:        parseFloat(row.querySelector('.c-lng').value) || 0,
+    deaths:     parseInt(row.querySelector('.c-deaths').value)    || 0,
+    confirmed:  parseInt(row.querySelector('.c-confirmed').value) || 0,
+    suspected:  parseInt(row.querySelector('.c-suspected').value) || 0,
+    status:     row.querySelector('.c-status').value,
+    statusText: row.querySelector('.c-statusText').value,
+    notes:      row.querySelector('.c-notes').value,
+  }));
+
+  // Timeline
+  const timeline = [...document.querySelectorAll('#timeline-list .repeat-row')].map(row => ({
+    date: row.querySelector('.tl-date').value,
+    dot:  row.querySelector('.dot-opt.selected')?.dataset.dot || 'gray',
+    text: row.querySelector('.tl-text').value,
+  }));
+
+  // Facts
+  const facts = [...document.querySelectorAll('#facts-list .repeat-row')].map(row => ({
+    label: row.querySelector('.f-label').value,
+    value: row.querySelector('.f-value').value,
+    color: row.querySelector('.f-color').value || null,
+  }));
+
+  // Trend
+  const trendRows = [...document.querySelectorAll('#trend-body tr')];
+  const trend = {
+    labels:    trendRows.map(r => r.querySelector('.tr-label').value),
+    confirmed: trendRows.map(r => parseInt(r.querySelector('.tr-confirmed').value) || 0),
+    deaths:    trendRows.map(r => parseInt(r.querySelector('.tr-deaths').value)    || 0),
+  };
+
+  // Keep existing newsSources and shipRoute from last loaded data (not editable here)
+  return { meta, totals, facts, countries, trend, timeline };
+}
+
+// ── Publish ────────────────────────────────────────────────────────────────
+
+async function publishToGitHub() {
+  if (!currentSha) { setStatus('Primero carga los datos con el botón Cargar.', 'error'); return; }
+
+  const token = getToken();
+  if (!token) { setStatus('Introduce tu GitHub Personal Access Token.', 'error'); return; }
+
+  // Update timestamp to now
+  document.getElementById('meta-lastUpdate').value = new Date().toISOString();
+
+  const btn = document.getElementById('btn-pub');
+  btn.disabled = true;
+  btn.textContent = '▲ Publicando…';
+  setStatus('Enviando cambios a GitHub…', 'info');
+
+  try {
+    // We need to preserve newsSources and shipRoute from a fresh fetch
+    const freshUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}?ref=${BRANCH}&_=${Date.now()}`;
+    const freshRes = await fetch(freshUrl, { headers: apiHeaders() });
+    const freshJson = await freshRes.json();
+    const existing = JSON.parse(atob(freshJson.content.replace(/\n/g, '')));
+    currentSha = freshJson.sha;
+
+    const newData = {
+      ...buildData(),
+      newsSources: existing.newsSources || [],
+      shipRoute:   existing.shipRoute   || [],
+    };
+
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
+
+    const putRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}`, {
+      method: 'PUT',
+      headers: apiHeaders(),
+      body: JSON.stringify({
+        message: `Dashboard update ${new Date().toISOString().slice(0,16).replace('T',' ')}`,
+        content,
+        sha: currentSha,
+        branch: BRANCH,
+      })
+    });
+
+    if (!putRes.ok) {
+      const err = await putRes.json();
+      throw new Error(err.message || 'HTTP ' + putRes.status);
+    }
+
+    const result = await putRes.json();
+    currentSha = result.content.sha;
+    setStatus('✓ Publicado correctamente. GitHub Pages actualizará en ~1 minuto.', 'success');
+  } catch(e) {
+    setStatus('Error al publicar: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '▲ Publicar en GitHub';
+  }
+}
+
+// ── Utils ──────────────────────────────────────────────────────────────────
+
+function esc(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/"/g,'&quot;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+
+// Restore token from localStorage
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const saved = localStorage.getItem('admin_token');
+    if (saved) document.getElementById('gh-token').value = saved;
+  } catch(_) {}
+});
+</script>
+</body>
+</html>
