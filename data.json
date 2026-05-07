@@ -1,23 +1,23 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-07T12:00:00Z",
-    "alertLevel": "MODERADO",
-    "alertColor": "amber",
-    "alertText": "El MV Hondius se aproxima a Tenerife. Llegada prevista mañana 8 de mayo. Protocolos de cuarentena activados. Caso confirmado en Suiza en estado grave."
+    "lastUpdate": "2026-05-08T10:00:00Z",
+    "alertLevel": "ALTO",
+    "alertColor": "red",
+    "alertText": "MV Hondius anclado frente a Granadilla de Abona (Tenerife). No atracará. Evacuación por lanchas prevista para el lunes 11 de mayo. Israel notifica su primer caso. Francia confirma caso por contacto en vuelo. Brote activo en 8 países."
   },
   "totals": {
     "deaths": 3,
-    "confirmed": 9,
-    "suspected": 14,
+    "confirmed": 11,
+    "suspected": 16,
     "quarantine": 148,
-    "countries": 5
+    "countries": 8
   },
   "facts": [
     { "label": "Cepa identificada",       "value": "Andes (transmisible entre humanos)", "color": null },
     { "label": "Origen probable",         "value": "Patagonia argentina (pre-embarque)", "color": null },
     { "label": "Periodo de incubación",   "value": "1 a 6 semanas",                      "color": null },
     { "label": "Tasa mortalidad Andes",   "value": "~25–35%",                             "color": "amber" },
-    { "label": "Llegada est. Canarias",   "value": "8 mayo 2026 (mañana)",               "color": "red" },
+    { "label": "Estado del barco",        "value": "Anclado en Tenerife — evacuación 11 mayo", "color": "red" },
     { "label": "Pasajeros españoles",     "value": "14 (traslado a Torrejón)",            "color": null }
   ],
   "countries": [
@@ -62,6 +62,20 @@
       "deaths": 0, "confirmed": 0, "suspected": 0,
       "status": "none", "statusText": "Sin casos",
       "notes": "Denegó entrada al barco. Personal médico subió a bordo para evaluación."
+    },
+    {
+      "name": "Francia",          "flag": "🇫🇷", "code": "fr",
+      "lat": 46.2, "lng": 2.2,
+      "deaths": 0, "confirmed": 1, "suspected": 0,
+      "status": "med", "statusText": "Caso confirmado",
+      "notes": "Caso confirmado por contacto en vuelo con pasajero del MV Hondius. Paciente en seguimiento."
+    },
+    {
+      "name": "Israel",           "flag": "🇮🇱", "code": "il",
+      "lat": 31.0, "lng": 34.9,
+      "deaths": 0, "confirmed": 1, "suspected": 0,
+      "status": "med", "statusText": "Primer caso",
+      "notes": "Primer caso confirmado. Pasajero ex-crucero hospitalizado. Autoridades activan rastreo de contactos."
     }
   ],
   "shipRoute": [
@@ -70,8 +84,8 @@
     { "lat": -15.0,  "lng": -35.0,  "label": "Atlántico Central" },
     { "lat": 5.0,    "lng": -26.0,  "label": "Atlántico Norte" },
     { "lat": 14.93,  "lng": -23.51, "label": "Cabo Verde — acceso denegado 4 May" },
-    { "lat": 21.0,   "lng": -18.0,  "label": "Posición actual — 7 May" },
-    { "lat": 28.07,  "lng": -16.56, "label": "Tenerife — destino 8 May" }
+    { "lat": 21.0,   "lng": -18.0,  "label": "Posición — 7 May" },
+    { "lat": 28.07,  "lng": -16.56, "label": "Tenerife — anclado 8 May (sin atracar)" }
   ],
   "timeline": [
     { "date": "20 Mar",   "dot": "gray",  "text": "El <strong>MV Hondius</strong> zarpa de Ushuaia (Argentina) con ~150 pasajeros." },
@@ -82,7 +96,8 @@
     { "date": "5 May",    "dot": "amber", "text": "Pasajero ex-crucero da positivo en <strong>Suiza</strong>. España autoriza atraque en Canarias." },
     { "date": "6 May",    "dot": "amber", "text": "Ministra Mónica García confirma llegada a <strong>Granadilla de Abona (Tenerife)</strong>. Españoles irán a Torrejón." },
     { "date": "7 May",    "dot": "red",   "text": "<strong>Nuevo confirmado a bordo</strong>. Total: 4 casos en el barco. Caso suizo empeora. Hospital de Referencia Nacional activado." },
-    { "date": "~8 May",   "dot": "blue",  "text": "<strong>Llegada prevista mañana</strong> a Granadilla de Abona (Tenerife). Zona de exclusión sanitaria preparada." }
+    { "date": "8 May",    "dot": "red",   "text": "<strong>MV Hondius ancla frente a Granadilla de Abona (Tenerife)</strong>. No atraca en puerto. Evacuación por lanchas prevista el lunes 11 de mayo. <strong>Francia</strong> confirma caso por contacto en vuelo. <strong>Israel</strong> notifica su primer caso." },
+    { "date": "11 May",   "dot": "blue",  "text": "<strong>Evacuación prevista</strong> de los pasajeros del MV Hondius. Españoles trasladados a Torrejón. Resto repatriados a sus países." }
   ],
   "newsSources": [
     { "name": "El País",        "color": "#4488ff", "url": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/ciencia/portada" },
@@ -94,8 +109,8 @@
   ],
 
   "trend": {
-    "labels":    ["24 Abr", "26 Abr", "28 Abr", "30 Abr", "2 May", "4 May", "5 May", "6 May", "7 May"],
-    "confirmed": [0, 1, 2, 3, 5, 6, 7, 8, 9],
-    "deaths":    [0, 1, 2, 2, 3, 3, 3, 3, 3]
+    "labels":    ["24 Abr", "26 Abr", "28 Abr", "30 Abr", "2 May", "4 May", "5 May", "6 May", "7 May", "8 May"],
+    "confirmed": [0, 1, 2, 3, 5, 6, 7, 8, 9, 11],
+    "deaths":    [0, 1, 2, 2, 3, 3, 3, 3, 3, 3]
   }
 }
