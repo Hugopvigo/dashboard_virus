@@ -3,6 +3,17 @@
 let appData = null;
 let sortState = { col: null, dir: 1 };
 
+// ── Twemoji ───────────────────────────────────────────────────────────────────
+
+function applyTwemoji() {
+  if (typeof twemoji === 'undefined') return;
+  const targets = ['country-list-overview', 'countries-table-body', 'facts-panel', 'timeline-list'];
+  targets.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) twemoji.parse(el, { className: 'emoji' });
+  });
+}
+
 // ── Data fetching ─────────────────────────────────────────────────────────────
 
 async function loadData() {
@@ -36,6 +47,8 @@ async function boot() {
 
   // News loads in background — ready when user clicks the tab
   initNews(appData);
+
+  applyTwemoji();
 
   // Auto-refresh all data every 5 minutes
   setInterval(refreshData, 5 * 60 * 1000);
@@ -71,6 +84,8 @@ async function refreshData() {
   newsLoaded = false;
   allArticles = [];
   initNews(appData);
+
+  applyTwemoji();
 
   if (btn) { btn.disabled = false; btn.textContent = '↺ Actualizar'; }
 }
