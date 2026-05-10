@@ -1,39 +1,53 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-08T10:00:00Z",
+    "lastUpdate": "2026-05-10T14:00:00Z",
     "alertLevel": "ALTO",
     "alertColor": "red",
-    "alertText": "MV Hondius anclado frente a Granadilla de Abona (Tenerife). No atracará. Evacuación por lanchas prevista para el lunes 11 de mayo. Israel notifica su primer caso. Francia confirma caso por contacto en vuelo. Brote activo en 8 países."
+    "alertText": "Evacuación del MV Hondius completada el 10 de mayo. 147 pasajeros de 23 países repatriados desde Tenerife. 14 españoles en cuarentena en Hospital Gómez Ulla (Torrejón). 3 muertos confirmados: pareja neerlandesa + ciudadano alemán. Brote activo en 13 países."
   },
   "totals": {
     "deaths": 3,
-    "confirmed": 11,
-    "suspected": 16,
-    "quarantine": 148,
-    "countries": 8
+    "confirmed": 12,
+    "suspected": 8,
+    "quarantine": 147,
+    "countries": 13
   },
   "facts": [
     { "label": "Cepa identificada",       "value": "Andes (transmisible entre humanos)", "color": null },
     { "label": "Origen probable",         "value": "Patagonia argentina (pre-embarque)", "color": null },
     { "label": "Periodo de incubación",   "value": "1 a 6 semanas",                      "color": null },
     { "label": "Tasa mortalidad Andes",   "value": "~25–35%",                             "color": "amber" },
-    { "label": "Estado del barco",        "value": "Anclado en Tenerife — evacuación 11 mayo", "color": "red" },
-    { "label": "Pasajeros españoles",     "value": "14 (traslado a Torrejón)",            "color": null }
+    { "label": "Estado del barco",        "value": "Evacuado el 10 mayo — 147 pax de 23 países repatriados", "color": "amber" },
+    { "label": "Pasajeros españoles",     "value": "14 en cuarentena — Hospital Gómez Ulla (Torrejón)",    "color": null }
   ],
   "countries": [
     {
       "name": "Argentina",        "flag": "🇦🇷", "code": "ar",
       "lat": -40.0, "lng": -63.5,
-      "deaths": 2, "confirmed": 3, "suspected": 0,
-      "status": "high", "statusText": "Brote activo",
-      "notes": "Origen probable. Patagonia. Contagio previo al embarque."
+      "deaths": 0, "confirmed": 2, "suspected": 0,
+      "status": "high", "statusText": "Origen del brote",
+      "notes": "Origen probable del contagio. Patagonia. Infección previa al embarque en Ushuaia."
     },
     {
       "name": "MV Hondius",       "flag": "🚢", "code": "ship",
-      "lat": 21.0, "lng": -18.0,
-      "deaths": 1, "confirmed": 4, "suspected": 7,
-      "status": "high", "statusText": "Cuarentena activa",
-      "notes": "A ~700 km de Tenerife. Llegada prevista 8 mayo. 148 pasajeros a bordo."
+      "lat": 28.07, "lng": -16.56,
+      "deaths": 0, "confirmed": 3, "suspected": 0,
+      "status": "med", "statusText": "Evacuado — 10 mayo",
+      "notes": "Evacuación completada el 10 de mayo en Granadilla de Abona (Tenerife). 147 pasajeros de 23 países repatriados. Desembarco por lanchas bajo protocolo sanitario estricto."
+    },
+    {
+      "name": "Países Bajos",     "flag": "🇳🇱", "code": "nl",
+      "lat": 52.4, "lng": 4.9,
+      "deaths": 2, "confirmed": 2, "suspected": 0,
+      "status": "high", "statusText": "2 fallecidos",
+      "notes": "Pareja neerlandesa fallecida a bordo (~26 abril). Primeras muertes del brote. Cepa Andes confirmada. Otros pasajeros neerlandeses hospitalizados tras evacuación."
+    },
+    {
+      "name": "Alemania",         "flag": "🇩🇪", "code": "de",
+      "lat": 51.2, "lng": 10.5,
+      "deaths": 1, "confirmed": 1, "suspected": 0,
+      "status": "high", "statusText": "1 fallecido",
+      "notes": "Ciudadano alemán fallecido. Pasajeros alemanes hospitalizados en Alemania tras ser repatriados desde Tenerife."
     },
     {
       "name": "Suiza",            "flag": "🇨🇭", "code": "ch",
@@ -50,32 +64,53 @@
       "notes": "Confirmado por laboratorio. Seguimiento activo. Estable."
     },
     {
+      "name": "Francia",          "flag": "🇫🇷", "code": "fr",
+      "lat": 46.2, "lng": 2.2,
+      "deaths": 0, "confirmed": 1, "suspected": 0,
+      "status": "med", "statusText": "Caso confirmado",
+      "notes": "Caso confirmado por contacto en vuelo con pasajero del MV Hondius. 8 ciudadanos franceses identificados como contactos cercanos de vuelo del 25 de abril."
+    },
+    {
+      "name": "Israel",           "flag": "🇮🇱", "code": "il",
+      "lat": 31.0, "lng": 34.9,
+      "deaths": 0, "confirmed": 1, "suspected": 0,
+      "status": "med", "statusText": "Caso confirmado",
+      "notes": "Caso confirmado. Pasajero ex-crucero hospitalizado. Autoridades activan rastreo de contactos."
+    },
+    {
       "name": "España",           "flag": "🇪🇸", "code": "es",
       "lat": 40.4, "lng": -3.7,
-      "deaths": 0, "confirmed": 0, "suspected": 7,
-      "status": "low", "statusText": "Preparación",
-      "notes": "Hospital de Referencia Nacional activado. 14 españoles serán trasladados a Torrejón."
+      "deaths": 0, "confirmed": 0, "suspected": 3,
+      "status": "med", "statusText": "Vigilancia activa",
+      "notes": "14 españoles del barco en cuarentena en Hospital Gómez Ulla (Torrejón), asintomáticos. 2 casos sospechosos en Cataluña (contactos de vuelo Johannesburgo). 1 caso sospechoso en Alicante."
     },
     {
       "name": "Cabo Verde",       "flag": "🇨🇻", "code": "cv",
       "lat": 14.93, "lng": -23.51,
       "deaths": 0, "confirmed": 0, "suspected": 0,
       "status": "none", "statusText": "Sin casos",
-      "notes": "Denegó entrada al barco. Personal médico subió a bordo para evaluación."
+      "notes": "Denegó entrada al barco el 4 de mayo. Personal médico subió a bordo para evaluación."
     },
     {
-      "name": "Francia",          "flag": "🇫🇷", "code": "fr",
-      "lat": 46.2, "lng": 2.2,
-      "deaths": 0, "confirmed": 1, "suspected": 0,
-      "status": "med", "statusText": "Caso confirmado",
-      "notes": "Caso confirmado por contacto en vuelo con pasajero del MV Hondius. Paciente en seguimiento."
+      "name": "EE.UU.",           "flag": "🇺🇸", "code": "us",
+      "lat": 38.9, "lng": -77.0,
+      "deaths": 0, "confirmed": 0, "suspected": 0,
+      "status": "low", "statusText": "Vigilancia CDC",
+      "notes": "17 ciudadanos americanos estaban a bordo. CDC activa seguimiento epidemiológico. Repatriados desde Tenerife."
     },
     {
-      "name": "Israel",           "flag": "🇮🇱", "code": "il",
-      "lat": 31.0, "lng": 34.9,
-      "deaths": 0, "confirmed": 1, "suspected": 0,
-      "status": "med", "statusText": "Primer caso",
-      "notes": "Primer caso confirmado. Pasajero ex-crucero hospitalizado. Autoridades activan rastreo de contactos."
+      "name": "Canadá",           "flag": "🇨🇦", "code": "ca",
+      "lat": 56.1, "lng": -106.3,
+      "deaths": 0, "confirmed": 0, "suspected": 3,
+      "status": "low", "statusText": "Monitorizados",
+      "notes": "3 personas en autoaislamiento: 2 en Ontario, 1 en Quebec. Sin síntomas declarados."
+    },
+    {
+      "name": "Singapur",         "flag": "🇸🇬", "code": "sg",
+      "lat": 1.35, "lng": 103.82,
+      "deaths": 0, "confirmed": 0, "suspected": 2,
+      "status": "low", "statusText": "Monitorizados",
+      "notes": "2 residentes en autoaislamiento. Hombres de 60+ años que compartieron vuelo con caso confirmado desde Johannesburgo."
     }
   ],
   "shipRoute": [
@@ -85,19 +120,22 @@
     { "lat": 5.0,    "lng": -26.0,  "label": "Atlántico Norte" },
     { "lat": 14.93,  "lng": -23.51, "label": "Cabo Verde — acceso denegado 4 May" },
     { "lat": 21.0,   "lng": -18.0,  "label": "Posición — 7 May" },
-    { "lat": 28.07,  "lng": -16.56, "label": "Tenerife — anclado 8 May (sin atracar)" }
+    { "lat": 28.07,  "lng": -16.56, "label": "Tenerife — evacuación completada 10 May" }
   ],
   "timeline": [
     { "date": "20 Mar",   "dot": "gray",  "text": "El <strong>MV Hondius</strong> zarpa de Ushuaia (Argentina) con ~150 pasajeros." },
     { "date": "1 Abr",    "dot": "gray",  "text": "Regresa a Ushuaia y vuelve a zarpar. Segunda etapa del viaje." },
     { "date": "1–20 Abr", "dot": "amber", "text": "Primeros pasajeros desarrollan síntomas. Período de incubación en curso." },
-    { "date": "~26 Abr",  "dot": "red",   "text": "<strong>Primeras muertes</strong> a bordo. Pareja neerlandesa fallece. Alarma médica." },
+    { "date": "24 Abr",   "dot": "amber", "text": "Escala en <strong>Santa Helena</strong>. Varios pasajeros desembarcan y toman vuelos hacia distintos países (inicio de la dispersión internacional)." },
+    { "date": "~26 Abr",  "dot": "red",   "text": "<strong>Primeras muertes</strong> a bordo. <strong>Pareja neerlandesa</strong> fallece. Alarma médica. OMS confirma cepa Andes." },
     { "date": "4 May",    "dot": "red",   "text": "El barco ancla frente a <strong>Praia (Cabo Verde)</strong>. Cabo Verde deniega entrada. OMS confirma 3 muertos." },
     { "date": "5 May",    "dot": "amber", "text": "Pasajero ex-crucero da positivo en <strong>Suiza</strong>. España autoriza atraque en Canarias." },
     { "date": "6 May",    "dot": "amber", "text": "Ministra Mónica García confirma llegada a <strong>Granadilla de Abona (Tenerife)</strong>. Españoles irán a Torrejón." },
-    { "date": "7 May",    "dot": "red",   "text": "<strong>Nuevo confirmado a bordo</strong>. Total: 4 casos en el barco. Caso suizo empeora. Hospital de Referencia Nacional activado." },
-    { "date": "8 May",    "dot": "red",   "text": "<strong>MV Hondius ancla frente a Granadilla de Abona (Tenerife)</strong>. No atraca en puerto. Evacuación por lanchas prevista el lunes 11 de mayo. <strong>Francia</strong> confirma caso por contacto en vuelo. <strong>Israel</strong> notifica su primer caso." },
-    { "date": "11 May",   "dot": "blue",  "text": "<strong>Evacuación prevista</strong> de los pasajeros del MV Hondius. Españoles trasladados a Torrejón. Resto repatriados a sus países." }
+    { "date": "7 May",    "dot": "red",   "text": "<strong>Nuevo confirmado a bordo</strong>. Total: 4 casos en el barco. Caso suizo empeora. Hospital de Referencia Nacional activado. Países Bajos confirma casos." },
+    { "date": "8 May",    "dot": "red",   "text": "<strong>MV Hondius ancla frente a Granadilla de Abona</strong>. No atraca en puerto. <strong>Francia</strong> confirma caso por contacto en vuelo. <strong>Israel</strong> notifica su primer caso. OMS eleva a 6 los confirmados." },
+    { "date": "9 May",    "dot": "red",   "text": "Ministros de Sanidad e Interior vuelan a Tenerife. OMS confirma brote en <strong>13 países</strong>. España detecta <strong>2 casos sospechosos en Cataluña</strong> (contactos de vuelo Johannesburgo) y 1 en Alicante. <strong>Ciudadano alemán</strong> fallece." },
+    { "date": "10 May",   "dot": "green", "text": "<strong>Evacuación del MV Hondius completada.</strong> 14 españoles vuelan en avión militar a Torrejón (Hospital Gómez Ulla). 147 pasajeros de 23 países repatriados desde Tenerife Sur. <strong>Clavijo</strong> (pres. Canarias) se opone al fondeo pero el Gobierno central lo autoriza. Canadá y Singapur activan cuarentenas." },
+    { "date": "Próx. sem.", "dot": "blue", "text": "<strong>Periodo crítico de incubación</strong> para los ~147 pasajeros repatriados. Cuarentena de hasta 42 días en sus países de origen. OMS mantiene vigilancia activa." }
   ],
   "newsSources": [
     { "name": "El País",        "color": "#4488ff", "url": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/ciencia/portada" },
@@ -109,8 +147,8 @@
   ],
 
   "trend": {
-    "labels":    ["24 Abr", "26 Abr", "28 Abr", "30 Abr", "2 May", "4 May", "5 May", "6 May", "7 May", "8 May"],
-    "confirmed": [0, 1, 2, 3, 5, 6, 7, 8, 9, 11],
-    "deaths":    [0, 1, 2, 2, 3, 3, 3, 3, 3, 3]
+    "labels":    ["24 Abr", "26 Abr", "28 Abr", "30 Abr", "2 May", "4 May", "5 May", "6 May", "7 May", "8 May", "9 May", "10 May"],
+    "confirmed": [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 12],
+    "deaths":    [0, 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3]
   }
 }
