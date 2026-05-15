@@ -443,7 +443,32 @@ main { padding: 32px; max-width: 1200px; margin: 0 auto; }
 }
 
 /* ── COUNTRY LIST (overview sidebar) ─────────────── */
-.country-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
+.country-list-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.country-list-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40px;
+  background: linear-gradient(transparent, var(--bg2));
+  pointer-events: none;
+  z-index: 1;
+}
+.country-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  max-height: 340px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+.country-list::-webkit-scrollbar { width: 4px; }
+.country-list::-webkit-scrollbar-track { background: transparent; }
+.country-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
 .country-item {
   background: var(--bg2);
