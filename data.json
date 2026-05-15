@@ -1,24 +1,24 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-10T14:00:00Z",
+    "lastUpdate": "2026-05-15T12:00:00Z",
     "alertLevel": "ALTO",
     "alertColor": "red",
-    "alertText": "Evacuación del MV Hondius completada el 10 de mayo. 147 pasajeros de 23 países repatriados desde Tenerife. 14 españoles en cuarentena en Hospital Gómez Ulla (Torrejón). 3 muertos confirmados: pareja neerlandesa + ciudadano alemán. Brote activo en 13 países."
+    "alertText": "España confirma su primer caso de hantavirus el 12 de mayo — pasajero en UATAN del Hospital Gómez Ulla, síntomas leves, estable. MV Hondius partió el 11 de mayo a Rotterdam para desinfección. OMS califica el brote como «bajo control» (13 mayo). 3 muertes confirmadas. Brote activo en 15 países."
   },
   "totals": {
     "deaths": 3,
-    "confirmed": 12,
-    "suspected": 8,
+    "confirmed": 13,
+    "suspected": 7,
     "quarantine": 147,
-    "countries": 13
+    "countries": 15
   },
   "facts": [
     { "label": "Cepa identificada",       "value": "Andes (transmisible entre humanos)", "color": null },
     { "label": "Origen probable",         "value": "Patagonia argentina (pre-embarque)", "color": null },
     { "label": "Periodo de incubación",   "value": "1 a 6 semanas",                      "color": null },
     { "label": "Tasa mortalidad Andes",   "value": "~25–35%",                             "color": "amber" },
-    { "label": "Estado del barco",        "value": "Evacuado el 10 mayo — 147 pax de 23 países repatriados", "color": "amber" },
-    { "label": "Pasajeros españoles",     "value": "14 en cuarentena — Hospital Gómez Ulla (Torrejón)",    "color": null }
+    { "label": "Estado del barco",        "value": "Evacuado 10 mayo — Partido a Rotterdam el 11 mayo para desinfección", "color": "amber" },
+    { "label": "Pasajeros españoles",     "value": "1 caso confirmado (UATAN) + 13 en cuarentena — Hospital Gómez Ulla",    "color": "red" }
   ],
   "countries": [
     {
@@ -32,8 +32,8 @@
       "name": "MV Hondius",       "flag": "🚢", "code": "ship",
       "lat": 28.07, "lng": -16.56,
       "deaths": 0, "confirmed": 3, "suspected": 0,
-      "status": "med", "statusText": "Evacuado — 10 mayo",
-      "notes": "Evacuación completada el 10 de mayo en Granadilla de Abona (Tenerife). 147 pasajeros de 23 países repatriados. Desembarco por lanchas bajo protocolo sanitario estricto."
+      "status": "med", "statusText": "Partido a Rotterdam",
+      "notes": "Evacuación completada el 10 de mayo en Granadilla de Abona (Tenerife). 147 pasajeros de 23 países repatriados. El barco partió el 11 de mayo hacia Rotterdam para desinfección y evaluación sanitaria."
     },
     {
       "name": "Países Bajos",     "flag": "🇳🇱", "code": "nl",
@@ -80,9 +80,9 @@
     {
       "name": "España",           "flag": "🇪🇸", "code": "es",
       "lat": 40.4, "lng": -3.7,
-      "deaths": 0, "confirmed": 0, "suspected": 3,
-      "status": "med", "statusText": "Vigilancia activa",
-      "notes": "14 españoles del barco en cuarentena en Hospital Gómez Ulla (Torrejón), asintomáticos. 2 casos sospechosos en Cataluña (contactos de vuelo Johannesburgo). 1 caso sospechoso en Alicante."
+      "deaths": 0, "confirmed": 1, "suspected": 2,
+      "status": "high", "statusText": "1 caso confirmado",
+      "notes": "Primer caso confirmado en España (12 mayo): pasajero del MV Hondius ingresado en UATAN, Hospital Gómez Ulla (Torrejón). Síntomas leves (fiebre baja, leve desaturación), estable. 13 pasajeros españoles restantes negativos, en cuarentena preventiva de 42 días (fin ~21 junio). 2 casos sospechosos pendientes en Cataluña (contactos de vuelo Johannesburgo) y 1 en Alicante."
     },
     {
       "name": "Cabo Verde",       "flag": "🇨🇻", "code": "cv",
@@ -111,6 +111,20 @@
       "deaths": 0, "confirmed": 0, "suspected": 2,
       "status": "low", "statusText": "Monitorizados",
       "notes": "2 residentes en autoaislamiento. Hombres de 60+ años que compartieron vuelo con caso confirmado desde Johannesburgo."
+    },
+    {
+      "name": "Australia",        "flag": "🇦🇺", "code": "au",
+      "lat": -25.3, "lng": 133.8,
+      "deaths": 0, "confirmed": 0, "suspected": 0,
+      "status": "low", "statusText": "Monitorizados",
+      "notes": "Ex-pasajeros del MV Hondius repatriados y en cuarentena o seguimiento médico activo. Incluidos en la lista de países confirmados por la OMS el 13 de mayo. Sin casos confirmados declarados."
+    },
+    {
+      "name": "Turquía",          "flag": "🇹🇷", "code": "tr",
+      "lat": 39.0, "lng": 35.2,
+      "deaths": 0, "confirmed": 0, "suspected": 0,
+      "status": "low", "statusText": "Monitorizados",
+      "notes": "3 pasajeros repatriados desde Tenerife en cuarentena domiciliaria bajo seguimiento sanitario. Incluidos en la lista de países confirmados por la OMS el 13 de mayo."
     }
   ],
   "shipRoute": [
@@ -135,7 +149,10 @@
     { "date": "8 May",    "dot": "red",   "text": "<strong>MV Hondius ancla frente a Granadilla de Abona</strong>. No atraca en puerto. <strong>Francia</strong> confirma caso por contacto en vuelo. <strong>Israel</strong> notifica su primer caso. OMS eleva a 6 los confirmados." },
     { "date": "9 May",    "dot": "red",   "text": "Ministros de Sanidad e Interior vuelan a Tenerife. OMS confirma brote en <strong>13 países</strong>. España detecta <strong>2 casos sospechosos en Cataluña</strong> (contactos de vuelo Johannesburgo) y 1 en Alicante. <strong>Ciudadano alemán</strong> fallece." },
     { "date": "10 May",   "dot": "green", "text": "<strong>Evacuación del MV Hondius completada.</strong> 14 españoles vuelan en avión militar a Torrejón (Hospital Gómez Ulla). 147 pasajeros de 23 países repatriados desde Tenerife Sur. <strong>Clavijo</strong> (pres. Canarias) se opone al fondeo pero el Gobierno central lo autoriza. Canadá y Singapur activan cuarentenas." },
-    { "date": "Próx. sem.", "dot": "blue", "text": "<strong>Periodo crítico de incubación</strong> para los ~147 pasajeros repatriados. Cuarentena de hasta 42 días en sus países de origen. OMS mantiene vigilancia activa." }
+    { "date": "11 May",   "dot": "green", "text": "El <strong>MV Hondius parte hacia Rotterdam</strong> para desinfección y evaluación sanitaria. Los dos últimos aviones con 28 evacuados llegan a Países Bajos. Sanidad confirma que los análisis genéticos demuestran que la variante Andes no presenta mutaciones relevantes." },
+    { "date": "12 May",   "dot": "red",   "text": "<strong>España confirma su primer caso</strong> de hantavirus: pasajero del MV Hondius ingresado en UATAN del Hospital Gómez Ulla (Torrejón). Síntomas leves —fiebre baja y leve desaturación de oxígeno—, estable. Los 13 pasajeros españoles restantes, negativos. Sanidad fija el <strong>10 de mayo como «día cero»</strong> de la cuarentena de 42 días." },
+    { "date": "13 May",   "dot": "amber", "text": "OMS publica <strong>DON601</strong>: 11 casos totales (8 confirmados, 1 inconcluso, 2 probables), 3 muertes. <strong>OMS califica el brote como «bajo control»</strong>: probabilidad de expansión significativa, baja. Ex-pasajeros hospitalizados o en cuarentena en 12 países. 41 personas monitorizadas por el CDC en EE.UU." },
+    { "date": "15 May →", "dot": "blue",  "text": "<strong>Periodo crítico de incubación</strong> en curso para los ~147 pasajeros repatriados. Cuarentena de hasta 42 días en sus países de origen (fin previsto ~21 junio). OMS y autoridades nacionales mantienen vigilancia activa. Próximos días: resultados de seguimiento en España, Australia y Turquía." }
   ],
   "newsSources": [
     { "name": "El País",        "color": "#4488ff", "url": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/ciencia/portada" },
@@ -147,8 +164,8 @@
   ],
 
   "trend": {
-    "labels":    ["24 Abr", "26 Abr", "28 Abr", "30 Abr", "2 May", "4 May", "5 May", "6 May", "7 May", "8 May", "9 May", "10 May"],
-    "confirmed": [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 12],
-    "deaths":    [0, 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3]
+    "labels":    ["24 Abr", "26 Abr", "28 Abr", "30 Abr", "2 May", "4 May", "5 May", "6 May", "7 May", "8 May", "9 May", "10 May", "11 May", "12 May", "13 May", "15 May"],
+    "confirmed": [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 12, 12, 13, 13, 13],
+    "deaths":    [0, 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
   }
 }
